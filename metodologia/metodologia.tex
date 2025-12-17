@@ -1,0 +1,407 @@
+%====================================================================
+% Metodologia: Escreva logo após o 
+% \chapter{Metodologia} o texto de seu trabalho referente 
+% aos métodos utilizados no que desenvolvimento de seu estudo. 
+%====================================================================
+\chapter{Metodologia}
+
+\section{COLUNA DE BOLHAS}
+
+\cite{Deen2000} analisam o problema de um reservatório vertical preenchido com água. Nesse reservatório são injetadas no seu interior bolhas com diâmetros e velocidades constantes. O fenômeno de coalescência não é considerado, devido a mistura de sal de cozinha na água destilada. Na Figura \ref{Fig:1} tem-se a representação esquemática da configuração experimental do PIV. A coluna tem uma seção de (WxD) de 0,15 x 0,15 m$^{2}$ e uma altura (L) de 1 m. O ar é introduzido no sistema através de uma placa perfurada. A placa contém 49 furos, com diâmetro de 1 mm, posicionados no meio da coluna a um passo quadrado de 6,25 mm. A coluna de bolhas foi operada com um nível inicial de líquido de 0,45 m (L/D = 3) e uma velocidade superficial do gás de 5,0 mm/s.
+
+
+
+\begin{figure}[h!]
+\centering
+\caption{Representação esquemática da configuração experimental do PIV.}
+\includegraphics[angle=0, width=13cm]{metodologia/Figuras/modeloexperimental.png}
+\caption*{Fonte: \cite{Deen2000}.}
+\label{Fig:1}
+\end{figure}
+
+O escoamento de água foi semeado com partículas rhodamin-B com diâmetro de 50 $\mu$m e densidade de 1,5 $\cdot$ 10$^3$ kg/m$^{3}$. A fração volumétrica das partículas foi de 10$^{-4}$. Um par de lasers Nd:YAG pulsados New Wave MiniLase de 15 Hz, com lente de expansão de feixe, foi utilizado para criar uma lâmina de luz com profundidade de 3 mm. Duas câmeras Kodak Megaplus ES 1.0 de 30 Hz foram utilizadas para registrar imagens de 1008 x 1018 px$^{2}$ do escoamento. A primeira câmera foi equipada com um filtro passa-banda laranja (comprimento de onda do filtro) para detectar a semeadura fluorescente. A segunda câmera, com um filtro passa-banda correspondente ao comprimento de onda da luz laser, detectou apenas a fase gasosa. Um processador Dantec PIV 2100 sincronizou o laser e as câmeras. No sistema PIV/LIF, 300 pares de imagens foram registrados durante um período de 900 s, para garantia de uma média de tempo estável. As medições foram realizadas em vários planos na coluna. No experimento PIV com uma única câmera, apenas 50 imagens foram registradas. Na Tabela \ref{Tab:1} tem-se uma visão geral das configurações experimentais. 
+
+No trabalho de \cite{DEEN20016341} estuda-se o uso de simulações LES, comparando com simulações que utilizam o Modelo de fechamento de turbulência k-$\varepsilon$. Os resultados são comparados com os experimentos de \cite{Deen2000}. No caso de malha grossa, a área de entrada de gás foi implementada em uma área central de 3x3 células d emalha. Uma velocidade superficial do gás de 4,9 $\cdot$ 10$^{-3}$ m/s leva a uma velocidade do gás de entrada de 0,12 m/s. No caso de uma malha de 8x8 células, resulta em uma velocidade do gás de entrada de 0,078 m/s. 
+
+\begin{table}[!h]
+\centering
+\caption{Visão geral das configurações experimentais.} 
+\label{Tab:1}
+\begin{tabular}{l|c|c}
+\hline
+\textbf{Configuração de medição} & \textbf{PIV/LIF} & \textbf{PIV de câmera única}\\
+\hline
+Campo de visão & 0,159 x 0,161 m$^{2}$ & 0,079 x 0,080 m$^{2}$ \\
+Áreas de interrogação & 64 x 64 px$^{2}$ = 0,01 x 0,01 m$^{2}$ & 64 x 64 px$^{2}$ = 0,01 x 0,01 m$^{2}$ \\
+Atraso de tempo de exposição& 1,0 ms & 2,5 ms \\
+Tempo médio & 900 s & 150 s \\
+\hline
+\end{tabular}
+\caption*{Fonte: (\cite{Deen2000}).}
+\end{table}
+
+\cite{CattaPreta2023} realiza o estudo do problema  de injeção de bolhas na parte inferior de uma coluna vertical preenchida com água. Nesse estudo foi proposto uma viscosidade modificada e uma força de arrasto em função da fração volumétrica da fase contínua. Também, avalia-se diferentes modelos de fechamento para a turbulência e compara-se os resultados da formulação de três vias com a de duas vias. 
+
+\subsection{Modelagem \cite{CattaPreta2023}}
+
+\subsubsection{Modelo físico}
+
+A coluna de bolhas possui $0,6$ m de altura e seção quadrada de lado $0,15$ m. A coluna está preenchida com água até $0,45$ m, sendo o restante preenchido com ar. O escoamento é considerado incompressível e isotérmico. A placa localizada na parte inferior da coluna contém 49 orifícios, com diâmetros de 1 mm, posicionados na parte central da coluna com um espaçamento quadrado de 6,25 mm. A velocidade de injeção das bolhas foi de 0,078 m/s.
+
+\subsubsection{Modelo matemático}
+
+Nesta subseção tem-se o sistema completo de equações matemáticas para escoamentos bifásicos densos incompressíveis e turbulentos.
+
+Na Equação (\ref{eq:bm}) tem-se o balanço de massa,
+
+\begin{equation} \label{eq:bm}
+    \frac{\partial \varepsilon^{k}}{\partial t} +\frac{\partial}{\partial x_i}(\varepsilon^{k} \bar{u_i}) = - \frac{\Gamma}{\tilde{\rho}^{k}}.
+\end{equation}
+
+Onde ( $\tilde{}$ ) e ( $\bar{}$ ) são operadores de filtragem definidas em \cite{CattaPreta2023} e o sobrescrito $k$ refere-se a fase $k$. $\varepsilon$ é a fração de volume, $u_i$ é a componente da velocidade, $\rho$ é a massa específica. $\Gamma$ é dado pela Eq. (\ref{eq:gamma})
+
+\begin{equation} \label{eq:gamma}
+    \Gamma = \int_{\partial \Omega^{k}} g(\mathbf{x} - \mathbf{y}) \rho^{k} (u_i-v_i)^{k}n_id^{2}\mathbf{y},
+\end{equation}
+
+onde, $\Gamma$ e $n_i$ são os componentes do vetor normal à interface. Esta integral de superfície é realizada sobre um contorno fechado ($\partial \Omega^{k}$) em todas as partículas no domínio. $g$ é uma função filtro.
+
+Na Equação (\ref{eq:bqml}) tem-se o balanço de quantidade de movimento linear,
+
+\begin{equation} \label{eq:bqml}
+    \frac{\partial}{\partial t}(\varepsilon^{k} \tilde{\rho}^{k} \bar{u}_i) + \frac{\partial}{\partial x_j}(\varepsilon^{k} \tilde{\rho}^{k} \bar{u}_i \bar{u}_j) = - \varepsilon^k \frac{\partial p^{*}}{\partial x_i} + \frac{\partial}{\partial x_j}(2 \varepsilon^{k} \mu_{ef} \bar{S}_{ij}^{d}) + M_i^{d} - u_{s,i} \Gamma + \varepsilon^{k} \rho g_i + \varepsilon^{k} f_{\sigma_i}.
+\end{equation}
+
+Onde $u_{s,i}$ são os componentes da média da velocidade interfacial da fase $k$, $\mu_{ef}$ é a viscosidade efetiva, $p^{*}$ é a pressão modificada, e $\bar{S}_{ij}^{d}$ é o tensor taxa de deformação. O termo $g_i$ representa o campo gravitacional e $f_{\sigma_i}$ refere-se a modelagem das forças interfaciais.
+
+Na Equação (\ref{eq:ti}) tem-se o transporte da interface (\cite{EVRARD2019}),
+
+\begin{equation} \label{eq:ti}
+    \frac{\partial \gamma}{\partial t} + u_i \frac{\partial \gamma}{\partial x_i} = 0,
+\end{equation}
+
+sendo $\gamma$ uma função coloração, dada por $\gamma = (1/V_K) \int \int \int_K \chi (x_i,t) dx_i$, onde $V_K$ é o volume da célula $K$.
+
+Para a força de tensão interfacial, tem-se a Eq. (\ref{eq:fti}),
+
+\begin{equation} \label{eq:fti}
+    f_{\sigma_i} = \sigma \kappa \frac{\partial \gamma}{\partial x_i}.
+\end{equation}
+
+Para o termo de arrasto generalizado a Eq. (\ref{eq:tag}), e para a fração de volume da partícula a Eq. (\ref{eq:fvp}),
+
+\begin{equation} \label{eq:tag}
+    M_i^{d} = - \sum_d g(x_i - x_i^{d})f_{di},
+\end{equation}
+
+\begin{equation} \label{eq:fvp}
+    \varepsilon^{k} = 1- \sum_d g(x_i - x_i^{d}) V_d,
+\end{equation}
+
+onde $\sum_d$ representa a soma sobre todas as partículas do domínio, $f_{di}$ é a força de arrasto, $x_i^{d}$ é a posição da partícula e $V_d$ é o volume da partícula. 
+
+Na Equação (\ref{eq:bet}) tem-se o balanço de energia térmica,
+
+\begin{equation} \label{eq:bet}
+    \frac{\partial}{\partial t}(\varepsilon^{k}\tilde{\rho}^{k}\bar{T}) + \frac{\partial}{\partial x_i}(\varepsilon^{k}\tilde{\rho}^{k}\tilde{c}_p\bar{u}_i\bar{T}) =  \frac{\partial}{\partial x_i}\left(K_{ef} \frac{\partial \bar{T}}{\partial x_i} \right) + A.
+\end{equation}
+
+$K_{ef}$ é o coeficiente de condução térmica efetivo, $c_p$ é o coeficiente de capacidade térmica  pressão constante e $T$ é o campo de temperatura. $A$ é dado pela Eq. (\ref{eq:A}).
+
+\begin{equation} \label{eq:A}
+    A = \varepsilon^{k} \tilde{\Phi} + \frac{D}{Dt}(\varepsilon^{k}P) + J- (c_pT)_s \Gamma.
+\end{equation}
+
+Onde $\Phi$ é a função potência específica de transformação viscosa em energia cinética em energia térmica e $J$ é a soma do fluxo de densidade e energia térmica sobre a partícula.
+
+As equações lagrangianas são dadas pelas Eq. (\ref{eq:l1}) e Eq, (\ref{eq:l2}),
+
+\begin{equation} \label{eq:l1}
+    \frac{d v_i}{dt} = \frac{(u_i - v_i)}{\tau_p} \frac{R_{ep}C_D}{24} + \frac{(\rho_p-\rho^{k})}{\rho_p}g_i,
+\end{equation}
+
+Onde $C_D$ é o coeficiente de arrasto, $R_{ep}$ é o número de Reynolds da partícula, $\rho^{k}$ é a massa específica da fase $k$, $\rho_p$ é a massa específica da partícula, $u_i$ é a velocidade do campo euleriano, $v_i$ é a velocidade da partícula, e $\tau_p$ é o tempo característico da partícula.
+
+\begin{equation} \label{eq:l2}
+    \frac{dT}{dt} = \frac{(T^{k} - T_d)}{\tau_c} \frac{Nu_c}{2}.
+\end{equation}
+
+Onde $T^{k}$ é a temperatura da fase contínua, $T_d$ é a temperatura da partícula, $Nu_c$ é o número de Nusselt que varia dependendo do número de Reynolds da partícula. 
+
+\subsubsection{Modelo computacional}
+
+Na Tabela \ref{Tab:2} tem-se os modelos de fechamento para a turbulência utilizados. Paras os casos 1,2,3 e 4 utilizou-se a malha de 32x32x128. A modificação da viscosidade molecular devida a presença da fase discreta foi implementada como $\mu' = \mu^{k}[(\varepsilon^{k})^{-n-1}-1]$, tendo em vista que quando $n=1$, é o valor adotado quando a fase dispersa é gasosa.
+
+\begin{table}[!h]
+\centering
+\caption{Modelos de fechamento da turbulência que foram simulados.} 
+\label{Tab:2}
+\begin{tabular}{l|c|c}
+\hline
+\textbf{Modelo} & \textbf{$C_s$} & \textbf{Caso}\\
+\hline
+Smagorinsky & 0,15 & 1\\
+Smagorinsky & 0,1 & 2 \\
+Smagorinsky & 0,2 & 3 \\
+Germano-Lilly & - & 4 \\
+Smagorinsky + Van Driest & 0,2 & 5 \\
+\hline
+\end{tabular}
+\caption*{Fonte: \cite{CattaPreta2023}.}
+\end{table}
+
+\subsection{Resultados (\cite{CattaPreta2023})}
+
+Na Figura \ref{Fig:56CattaPreta} tem-se os resultados para os casos 1,2,3 e 4 da velocidade média do campo euleriano comparado com o resultado experimental de \cite{DEEN20016341}. Esses casos de diferenciam na constante de Smagorinsky adotada (casos 1,2 e 4), e no modelo de fechamento da turbulência para o caso 4. O caso 2 (contante de Smagorinsky igual a 0,1) apresentou melhor resultado para a variável de analisada em questão, comparado com os resultados experimentais.
+
+\begin{figure}[h!]
+\centering
+\caption{Velocidade média do campo euleriano comparado com o resultado do
+experimento material de \cite{DEEN20016341}.}
+\includegraphics[angle=0, width=13cm]{metodologia/Figuras/fig56.png}
+\caption*{Fonte: \cite{CattaPreta2023}.}
+\label{Fig:56CattaPreta}
+\end{figure}
+
+Na Figura \ref{Fig:57CattaPreta} tem-se os resultados para os casos 1 a 4 do desvio padrão do campo da flutuação da velocidade euleriana na direção z, comparado com o resultado do experimento material de \cite{DEEN20016341}. O caso 1 (constante de Smagorinsky igual a 0,15) apresentou melhor resultado para a variável analisada, comparada aos resultados experimentais.
+
+\begin{figure}[h!]
+\centering
+\caption{Desvio padrão do campo da flutuação da velocidade euleriana na
+direção z, comparado com o resultado do experimento material de \cite{DEEN20016341}.}
+\includegraphics[angle=0, width=13cm]{metodologia/Figuras/fig57.png}
+\caption*{Fonte: \cite{CattaPreta2023}.}
+\label{Fig:57CattaPreta}
+\end{figure}
+
+Na Figura \ref{Fig:58CattaPreta} tem-se os resultados para os casos 1 a 4 do desvio padrão do campo da flutuação da velocidade euleriana na direção x, comparado com o resultado do experimento material de \cite{DEEN20016341}. Todos os casos apresentaram resultados bem próximos comparado aos resultados experimentais.
+
+\begin{figure}[h!]
+\centering
+\caption{Desvio padrão do campo da flutuação da velocidade euleriana na
+direção x, comparado com o resultado do experimento material de \cite{DEEN20016341}.}
+\includegraphics[angle=0, width=13cm]{metodologia/Figuras/fig58.png}
+\caption*{Fonte: \cite{CattaPreta2023}.}
+\label{Fig:58CattaPreta}
+\end{figure}
+
+Na Figura \ref{Fig:59CattaPreta} tem-se os resultados para os casos 1 a 4 da energia cinética turbulenta do campo de flutuação de velocidade euleriana, comparado com o resultado do experimento material de \cite{DEEN20016341}.O caso 1 (constante de Smagorinsky igual a 0,15) apresentou o melhor resultado dentre os demais.
+
+\begin{figure}[h!]
+\centering
+\caption{Energia cinética turbulenta do campo de flutuação de velocidade
+euleriana, comparado com o resultado do experimento material de \cite{DEEN20016341}.}
+\includegraphics[angle=0, width=13cm]{metodologia/Figuras/fig59.png}
+\caption*{Fonte: \cite{CattaPreta2023}.}
+\label{Fig:59CattaPreta}
+\end{figure}
+
+Na Figura \ref{fig:quatro_figuras} tem-se os resultados utilizando o modelo de fechamento de Smarorinsky ($C_s =0,2$) mais o modelo de função de parede de Van Driest, comparado com o resultado do experimento material de \cite{DEEN20016341}. Na Fig. \ref{fig:subfig1} tem-se a comparação da velocidade média do campo euleriano, na Fig. \ref{fig:subfig2} compara-se com o desvio padrão do campo da flutuação da velocidade euleriana na direção z e na Fig. \ref{fig:subfig3} na direção x. Na Fig. \ref{fig:subfig4} tem-se a comparação da energia cinética turbulenta do campo de flutuação de velocidade euleriana. Segundo \cite{CattaPreta2023}, o modelo de Van Driest comparado com o Caso 3 ($C_s = 0, 2$), apresenta uma atenuação dos campos calculados. E a inclusão de um termo de amortecimento para o campo de velocidade próximo à parede, impacta diretamente nessa atenuação.
+
+\begin{figure}[h!]
+    \centering
+\caption{Comparado com o resultado do experimento material de \cite{DEEN20016341}.}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \caption{Velocidade média do campo euleriano.}
+        \includegraphics[width=\textwidth]{metodologia/Figuras/fig60.png}
+        \label{fig:subfig1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \caption{Desvio padrão do campo da flutuação da velocidade euleriana na
+direção z.}
+        \includegraphics[width=\textwidth]{metodologia/Figuras/fig61.png}
+        \label{fig:subfig2}
+    \end{subfigure}
+
+    \vspace{0.5cm}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+           \caption{Desvio padrão do campo da flutuação da velocidade euleriana na
+direção x.}
+        \includegraphics[width=\textwidth]{metodologia/Figuras/fig62.png}
+        \label{fig:subfig3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+         \caption{Energia cinética turbulenta do campo de flutuação de velocidade
+euleriana.}
+        \includegraphics[width=\textwidth]{metodologia/Figuras/fig63.png}  
+        \label{fig:subfig4}
+    \end{subfigure}
+
+    \caption*{Fonte: \cite{CattaPreta2023}.}
+    \label{fig:quatro_figuras}
+\end{figure}
+
+\subsection{Modelagem}
+
+Nesta seção tem-se a modelagem do problema discutido nas seções anteriores. Para a simulação numérico-computacional foi utilizado o software MFSim, desenvolvido pelo Laboratório de Mecânica dos Fluidos da Universidade Federal de Uberlândia (UFU). O modelo físico adotado foi o mesmo descrito em \cite{CattaPreta2023}.
+
+\subsubsection{Modelo computacional}
+
+O domínio computacional utilizado para as simulações foi o mesmo adotado por \cite{CattaPreta2023}. Foi utilizado o \textit{branch} dev/BIT2, com algumas alterações no código comparando com o \textit{branch master}, para melhor modelagem do problema proposto.
+
+Na Tabela \ref{Tab:3} tem-se os métodos de discretização utilizados para o acoplamento pressão-velocidade.
+
+\begin{table}[!h]
+\centering
+\caption{Acoplamento pressão-velocidade e modelos de discretização.} 
+\label{Tab:3}
+\begin{tabular}{l|c}
+\hline
+\textbf{Discretização} & \textbf{Método} \\
+\hline
+Acoplamento pressão-velocidade & Passos fracionados \\
+Temporal & Semi-implícito - sbdf \\
+Formulação & Divergente ("Conservativa") \\
+Advecção & Barton \\
+Momentum & Malalasekera \\
+CFL global & 0,1 \\
+\hline
+\end{tabular}
+\caption*{Fonte: Próprio autor.}
+\end{table}
+
+Na Tabela \ref{Tab:4} tem-se os dados referentes aos parâmetros de controle das fases contínua e dispersa.
+
+\begin{table}[!h]
+\centering
+\caption{Parâmetros de controle das fases.} 
+\label{Tab:4}
+\begin{tabular}{l|c}
+\hline
+\textbf{Parâmetro} & \textbf{Valor} \\
+\hline
+Massa específica da fase contínua, kg/m$^{3}$ & 1,2 \\
+Massa específica da fase dispersa, kg/m$^{3}$ & 1000 \\
+Viscosidade dinâmica da fase contínua, Pa$\cot$s & 1,72E-05\\
+Viscosidade dinâmica da fase dispersa, Pa$\cot$s & 1,002E-03\\
+Coeficiente de tensão interfacial, N/m & 0,072 \\
+Campo gravitacional, m/s$^{2}$ (X, Y, Z) & 0; 0; -9,81\\
+\hline
+\end{tabular}
+\caption*{Fonte: Prprio autor.}
+\end{table}
+
+O tempo físico final de simulação é 200 s, e é utilizado a metodologia de passo de tempo dinâmico. É utilizado o método \textit{Volume of Fluid}(VoF) para a fase líquida e o método \textit{Discrete Phase Model} (DPM) para a fase gasosa.
+
+Na Tabela \ref{Tab:5} tem-se os modelos de fechamento de turbulência utilizados para cada caso.
+
+\begin{table}[!h]
+\centering
+\caption{Modelos de fechamento da turbulência que foram simulados.} 
+\label{Tab:5}
+\begin{tabular}{l|c|c|c}
+\hline
+\textbf{Modelo} & \textbf{$C_s$} & \textbf{Caso} & \textbf{Células no lbot}\\
+\hline
+Smagorinsky Dinâmico + Filtro Explícito & - & 1 & 32x32x128 \\
+\hline
+\end{tabular}
+\caption*{Fonte: Próprio autor.}
+\end{table}
+
+\subsection{Resultados}
+
+Nesta seção é apresentado os resultados obtidos através do modelo computacional proposto na seção anterior. Os dados para análise estatística foram coletados a partir do tempo físico de 150 s.
+
+Na Figura \ref{Fig:2} tem-se o resultado obtido da velocidade média do campo euleriano comparado com o resultado do experimento material de \cite{DEEN20016341}. O resultado obtido foi satisfatório.
+
+\begin{figure}[h!]
+\centering
+\caption{Velocidade média do campo euleriano comparado com o resultado do
+experimento material de \cite{DEEN20016341}.}
+\includegraphics[angle=0, width=13cm]{metodologia/Figuras/Dym_Smag_mean_w.jpeg}
+\caption*{Fonte: Próprio autor.}
+\label{Fig:2}
+\end{figure}
+
+Na Figura \ref{Fig:3} tem-se o desvio padrão do campo da flutuação da velocidade euleriana na direção x, comparado com o resultado do experimento material de \cite{DEEN20016341}. O resultado obtido subestima os valores de referência.
+
+\begin{figure}[h!]
+\centering
+\caption{Desvio padrão do campo da flutuação da velocidade euleriana na
+direção z, comparado com o resultado do experimento material de \cite{DEEN20016341}.}
+\includegraphics[angle=0, width=13cm]{metodologia/Figuras/Dym_Smag_std_w.jpeg}
+\caption*{Fonte: Próprio autor.}
+\label{Fig:3}
+\end{figure}
+
+Na Figura \ref{Fig:4} tem-se o desvio padrão do campo da flutuação da velocidade euleriana na direção x, comparado com o resultado do experimento material de \cite{DEEN20016341}. Os resultados estão de acordo com o experimento material, exceto por um afastamento entre 0,2 a 0,6 de x/L.
+
+\begin{figure}[h!]
+\centering
+\caption{Desvio padrão do campo da flutuação da velocidade euleriana na
+direção x, comparado com o resultado do experimento material de \cite{DEEN20016341}.}
+\includegraphics[angle=0, width=13cm]{metodologia/Figuras/Dym_Smag_std_u.jpeg}
+\caption*{Fonte: Próprio autor.}
+\label{Fig:4}
+\end{figure}
+
+Na Figura \ref{Fig:5} tem-se a energia cinética turbulenta do campo de flutuação de velocidade, comparado com o resultado do experimento material de \cite{DEEN20016341}. Tem-se que os resultados obtidos via simulação computacional subestimaram os resultados obtidos no experimento material.
+
+\begin{figure}[h!]
+\centering
+\caption{Energia cinética turbulenta do campo de flutuação de velocidade
+euleriana, comparado com o resultado do experimento material de \cite{DEEN20016341}.}
+\includegraphics[angle=0, width=13cm]{metodologia/Figuras/Dym_Smag_std_ke.jpeg}
+\caption*{Fonte: Próprio autor.}
+\label{Fig:5}
+\end{figure}
+
+\subsection{Conclusão}
+
+Neste trabalho foi discorrido sobre experimento material realizado por \cite{DEEN20016341}, da injeção de bolhas na parte inferior de um reservatório vertical preenchido com água. Posteriormente foi detalhado o modelo matemático desenvolvido por \cite{CattaPreta2023}, para formulação de 3 vias. É apresentado os resultados obtidos por \cite{CattaPreta2023}, variando a constante de Smagorinsky e utilizando o modelo de Germano-Lilly. 
+
+Apresentou-se os resultados obtidos para o modelo de fechamento da turbulência de Smagorinsky dinâmico em conjunto com um filtro explícito. O resultado para a velocidade média do campo euleriano foi satisfatório. O restante das variáveis comparadas apresentaram um distanciamento dos resultados obtidos por \cite{DEEN20016341}.
+
+Para trabalhos futuros pretende-se realizar as simulações realizadas por \cite{CattaPreta2023} para comparação de resultados. E posteriormente, o refinamento desses resultados.
+
+
+\section{QUEIMADOR DE SPRAY COM AGULHA PILOTADA DE SYDNEY}
+
+\begin{table}[h]
+    \centering
+    \caption{Comparativo de grandezas características de Kolmogorov e Taylor}
+    \label{tab:comparativo_escalas}
+    \begin{tabular}{l c c c c}
+        \toprule
+        \textbf{Grandeza Característica} & \textbf{ (\textit{l})} & \textbf{Valor (\textit{l})} & \textbf{ (\textit{g})} & \textbf{Valor (\textit{g})} \\
+        \midrule
+        Comprimento (Kolmogorov) & $\eta_l \text{ (m)}$ & $1.32 \times 10^{-6}$ & $\eta_g \text{ (m)}$ & $4.20 \times 10^{-6}$ \\
+        Comprimento (Taylor) & $\lambda_l \text{ (m)}$ & $5.98 \times 10^{-4}$ & $\lambda_g \text{ (m)}$ & $5.24 \times 10^{-3}$ \\
+        \midrule
+        Tempo (Kolmogorov) & $\tau_l \text{ (s)}$ & $2.33 \times 10^{-4}$ & $\tau_g \text{ (s)}$ & $8.41 \times 10^{-5}$ \\
+        Tempo (Taylor) & $\tau_L \text{ (s)}$ & $2.33 \times 10^{-4}$ & $\tau_G \text{ (s)}$ & $1.09 \times 10^{-4}$ \\
+        \midrule
+        Velocidade (Kolmogorov) & $v_{r,l} \text{ (m/s)}$ & $3.20 \times 10^{-1}$ & $v_{r,g} \text{ (m/s)}$ & $3.59 \times 10^{+0}$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[h!]
+\footnotesize
+    \centering
+    \caption{\textbf{Análise de Malha }}
+    \begin{tabular}{l|c||c|c|c|c}
+        \hline
+        \multicolumn{2}{c||}{\textbf{Domínio}} & \multicolumn{4}{c}{\textbf{Comprimento de Malha}} \\
+        \hline
+        \textbf{Métrica} & \textbf{Base (m)} & \textbf{Base Taylor} $\times$ \textbf{0,5} & \textbf{Base Taylor} & \textbf{Base Taylor} $\times$ \textbf{2,5} & \textbf{Kolmogorov} \\
+        \hline
+        \text{Tamanho da Célula} [min(L,g)] & - & $0,000299$ & $0,000598$ & $0,001495$ & $1,32 \times 10^{-6}$ \\
+        \hline
+        \text{Células em } $x$ & $0,0125$ & $41,8$ & $20,9$ & $8,4$ & $9440,9$ \\
+        \text{Células em } $y$ & $0,0125$ & $41,8$ & $20,9$ & $8,4$ & $9440,9$ \\
+        \text{Células em } $z$ & $0,05$ & $167,3$ & $83,6$ & $33,5$ & $37763,5$ \\
+        \hline
+        \multicolumn{2}{l||}{\textbf{Total de Células}} & $2,92 \times 10^{5}$ & $36555,3$ & $2339,5$ & $3,37 \times 10^{12}$ \\
+        \hline
+    \end{tabular}
+\end{table}

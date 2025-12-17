@@ -1,0 +1,833 @@
+%====================================================================
+% Fundamentação teórica: Escreva logo após o 
+% \chapter{Fundamentação Teórica} a texto de seu trabalho referente 
+% aos fundamentos teóricos do que desenvolveu em seu estudo. 
+%====================================================================
+\chapter{Fundamentação Teórica}
+
+%===============================================================================================================================
+\section{Artigo Capecelatro e Desjardins (2013)\cite{CAPECELATRO2013}}
+
+
+
+%===============================================================================================================================
+\section{Artigo Ku \textit{et al.} (2015) \cite{KU2015}}
+
+\subsection{Modelo Físico}
+
+Neste modelo é considerado partículas de areia e de biomassa. Na qual a areia é um elemento inerte.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{fundamentacao-teorica/Kufig2.png}
+ \caption{Geometria do reator de leito fluidizado. Retirado de \cite{KU2015}.}
+\label{Kufig2}
+\end{figure}
+
+Na Fig. \ref{Kufig2}, mostra-se o esboço da geometria . O recipiente retangular possui largura de 0,23 m, altura de 1,5 m e espessura de 0,0015 m, com um orifício de 0,01 m de largura no centro da parede inferior.
+
+\subsection{Modelagem matemática}
+
+O modelo CFD-DEM é formulado com base em um modelo multifásico Euleriano-Lagrangiano de estado instável, o que significa que as equações de transporte são resolvidas para a fase contínua e cada uma das partículas é rastreada através do campo gasoso calculado. A interação entre a fase contínua e a fase discreta é levada em consideração ao tratar a troca de massa, quantidade de movimento linear e energia entre os dois sistemas como termos fonte nas equações de balanço. Especificamente, os mecanismos de troca de massa e energia são adotados do trabalho de Kumar e Ghoniem (2012)\cite{Kumar2012} com certas modificações, conforme será descrito abaixo. Além disso, para a troca de quantidade de movimento linear, questões detalhadas de implementação estão disponíveis em Ku \textit{et al.} (2013)\cite{KU2013}.
+
+\subsubsection{Fase de partículas discretas}
+
+A fase de partículas discretas consiste em areia e partículas de biomassa que são modelados de forma Lagrangiana. A areia desempenha apenas o papel de transportador de energia térmica na gaseificação da biomassa sem participar de nenhuma reação, enquanto a biomassa passa por sucessivos processos físicos e químicos, como aquecimento, secagem, pirólise e gaseificação, e seu comportamento está fortemente relacionado às condições de operação.
+
+\subsubsection{Movimento das partículas}
+
+As equações de balanço de massa (Eq. \ref{Kueq1}), quantidade de movimento linear (Eq. \ref{Kueq2}-\ref{Kueq7}), energia (Eq. \ref{Kueq8}) são descritas abaixo.
+
+\begin{equation} \label{Kueq1}
+    \frac{dm_p}{dt} = \frac{dm_{vapor}}{dt} + \frac{dm_{devol}}{dt} +\frac{dm_{\text{C}-\text{CO}_2}}{dt} + \frac{dm_{\text{C}-\text{H}_2\text{O}}}{dt}
+\end{equation}
+
+\begin{equation} \label{Kueq2}
+    m_p \frac{d\bm{v}_p}{dt} = \bm{f}_g + \bm{f}_c + m_p\bm{g}
+\end{equation}
+
+\begin{equation} \label{Kueq3}
+    I_p \frac{d\bm{w}_p}{dt} = \bm{T}_p
+\end{equation}
+
+\begin{equation} \label{Kueq4}
+    \bm{f}_g = \frac{V_p\beta}{\varepsilon_p}(\bm{u}_g-\bm{v}_p)
+\end{equation}
+
+\begin{equation} \label{Kueq5}
+    \beta=
+    \begin{cases}
+        150\frac{\varepsilon_p^{2}\mu_g}{\varepsilon_g^{2}d_p^{2}}+1,75 \frac{\varepsilon_p\rho_p}{\varepsilon_g d_p} |\bm{u}_g - \bm{v}_p| & \varepsilon_g < 0,8 
+        \\
+        \frac{3}{4} C_d \frac{\varepsilon_p \rho_g}{d_p} |\bm{u}_g - \bm{v}_p| \varepsilon_g^{-2,65} & \varepsilon_g \geq 0,8
+    \end{cases}
+\end{equation}
+
+\begin{equation} \label{Kueq6}
+    C_d = 
+    \begin{cases}
+        \frac{24}{Re_p}(1+0,15Re_p^{0,687}) & Re_p < 1000
+        \\
+        0,44 & Re_p \geq 1000
+    \end{cases}
+\end{equation}
+
+\begin{equation} \label{Kueq7}
+    Re_p = \varepsilon_g \rho_g d_p |\bm{u}_g-\bm{v}_p|/\mu_g
+\end{equation}
+
+\begin{equation} \label{Kueq8}
+    m_p c_p \frac{dT_p}{dt} = hA_p(T_g - T_p) + \frac{e_p A_p}{4}(G - 4 \sigma T_p^{4}) + Q_p
+\end{equation}
+
+Conforme mostrado na Eq. \ref{Kueq2}, $\bm{f}_c$, ou seja, a força de contato total atuando na partícula devido a colisões entre as partículas ou partículas-parede, é levada em consideração e é necessária para fluxos densos de gás-partícula. Isso é diferente do modelo de Kumar e Ghoniem (2012)\cite{Kumar2012} que não considera as forças de contato e , portanto, seu modelo é apenas aplicável a sistemas multifásicos diluídos. 
+
+Neste artigo, o coeficiente de troca de quantidade de movimento linear interfásico $\beta$  é modelado por meio da conhecida correlação de arrasto de Gidaspow (Gidaspow, 1994\cite{Gidaspow1994}). Conforme mostrado na Eq. \ref{Kueq5}, o modelo de Gidaspow combina as correlações de Ergun (1952) e Wen e Yu (1966) para o regime granular diluído e denso, onde uma porosidade $\varepsilon_g$ de $0,8$ é adotada como o limite entre esses dois regimes. Este modelo é frequentemente usado na literatura e os efeito do uso de diferentes modelos de arrasto foram discutidos na publicação de Ku \textit{et al.} (2013).
+
+Na Eq. \ref{Kueq8} tem-se a temperatura da partícula calculada levando em consideração a transferência de energia térmica devido à convecção, radiação e termo fonte $Q_p$, incluindo tanto o calor latente de vaporação da água da partícula para a fase gasosa quanto o calor gerado pelas reações heterogêneas de carvão. 
+
+As colisões entre partículas ou partículas-parede são resolvida por um método de elementos discretos de esfera macia que foi proposto primeiramente por Cundall e Strack (1979). Neste método, as forças de contato entre partículas são calculadas usando elementos mecânicos simples equivalente, como mola, controle deslizante e amortecedor, ilustrado na Fig. \ref{Kufig1}. As partículas podem se sobrepor levemente. A força normal que tende a repelir as partículas pode ser deduzida dessa sobreposição espacial e da velocidade relativa normal no ponto de contato. A rigidez da mola pode ser calculada pela teoria de contato hertziana quando as propriedades físicas como o módulo de Young e a razão de Poisson são conhecidas. Uma característica do modelo de esfera macia é que ele é capaz de lidar com múltiplos contatos partícula-partícula, o que é de muita importância ao modelas sistemas de partículas densas como leito fluidizado. Problemas detalhados de implementação do modelo de esfera macia estão disponíveis na literatura (por exemplo, Tsuji \textit{et al.}, 1992). Neste estudo, as seguintes propriedades físicas são adotadas para o modelo de colisão: O módulo de Young é $5 \times 10^{6}$ Pa; a razão de Poisson é $0,3$; o coeficiente de restituição e o coeficiente de atrito são $0,9$ e $0,3$, respectivamente. Todos os valores são igualmente válidos para paredes e partículas (Bruchmuller \textit{et al.}, 2013).
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{fundamentacao-teorica/Kufig1.png}
+ \caption{Retirado de \cite{KU2015}.}
+\label{Kufig1}
+\end{figure}
+
+\subsubsection{Pirólise}
+
+Assim que a biomassa fresca é introduzida no fundo do leito de areia quente, ela é imediatamente aquecida e, portanto, ocorre a desvolatilização e pirólise da biomassa, bem como a gaseificação do carvão. As composições de pirólise liberadas da biomassa podem ser expressas pela seguinte equação de equilíbrio e cada rendimento do produto é resolvido com a ajuda da análise de conservação elementar.
+
+\begin{equation} \label{Kueq9}
+    \text{Biomass} \rightarrow \alpha_1 \text{CO} + \alpha_2 \text{H}_2\text{O} + \alpha_3 \text{CO}_2 + \alpha_4\text{H}_2 + \alpha_5 \text{CH}_4 + \alpha_6 \text{char(s)} + \alpha_7 \text{ash(s)} , \sum_i \alpha_i = 1
+\end{equation}
+
+Note que, no modelo atual, as reações com enxofre e nitrogênio não são levadas em conta devido à sua pequena quantidade (Tabela \ref{Kutab3}), e são consideradas pasando diretamente para cinzas. $\text{CH}_4$ é a única espécie de hidrocarboneto levada em consideração. Embora $\text{C}_2\text{H}_2$, $\text{C}_2\text{H}_4$, $\text{C}_2\text{H}_6$ e outros hidrocarbonetos superiores (alcatrão) sejam produzidos no processo de pirólise, eles são tratados como produtos não estáveis e esses mecanismo também tem sido amplamente utilizado por outros pesquisadores (Ergudenler \textit{et al.}, 1997; Gerber \textit{et al.}, 2010). Consistente com o trabalho de Abani e Ghoniem (2013), a taxa de desvolatização é modelada usando uma única reação de Arrhenius de prmeira ordem, dada pela Eq. \ref{Kueq10}.
+
+\begin{equation} \label{Kueq10}
+    \frac{dm_{devol}}{dt} = A\text{exp}\left(- \frac{E}{RT_p} \right) m_{devol}
+\end{equation}
+
+Onde $m+_{devol}$ é a massa dos voláteis restantes na partícula, $A=5,0 \times 10^{6} \text{s}^{-1}$, e $E=1,2 \times 10^{8} \text{J}/\text{kmol}$ (Prakash e Karunanithi, 2008). O processo de desvolatização é considerado energeticamente neutro porque o calor da desvolatização é geralmente desprezível em comparação ao calor das reações devido às reações de consumo de carvão (Abani e Ghoniem, 2013).
+
+\begin{table}[h]
+    \centering
+    \caption{Pine wood properties (Song \textit{et al., 2012}).}
+    \vspace{0.2cm}
+    \footnotesize
+    \begin{tabular}{l c | l c}
+        \toprule
+        \multicolumn{2}{c|}{\textbf{Proximate analysis} (\textit{wt\%, on the as-received basis})} & \multicolumn{2}{c}{\textbf{Elemental analysis} (\textit{wt\%, on the daf basis})} \\
+        \midrule
+        Moisture      & 11.89 & C  & 46.29 \\
+        Ash          & 1.56  & H  & 6.48  \\
+        Volatile     & 71.78 & O  & 46.08 \\
+        Fixed carbon & 14.77 & N\&S  & 1.15 \\
+        \bottomrule
+    \end{tabular}
+    \label{Kutab3}
+\end{table}
+
+\subsubsection{Química e conversão de carvão}
+
+Após a desvolatização, a partícula de biomassa é deixada com carvão e cinzas. Assume-se que as cinzas são transportadas junto com a partícula sem participar de nenhuma reação. O carvão reagirá na presença de dióxido de carbono e vapor e será convertido em monóxido de carbono e hidrogênio. As seguintes reações heterogêneas são assumidas e implementadas no OpenFOAM.
+
+\begin{equation} \label{KueqR1}
+    \text{C} + \text{CO}_2 \rightarrow 2\text{CO}
+\end{equation}
+
+\begin{equation} \label{KueqR2}
+    \text{C} + \text{H}_2\text{O} \rightarrow \text{CO} + \text{H}_2
+\end{equation}
+
+As reações \ref{KueqR1} e \ref{KueqR2} são reações de gaseificação endotérmica e \ref{KueqR1} é conhecida como reação de Boudoard. 
+
+A taxa de consumo de carvão que inclui os efeitos de ambas as taxas de difusão e cinética é dada como
+
+\begin{equation} \label{Kueq11}
+    \frac{dm_{C-i}}{dt} = - A_p p_i \frac{r_{diff,i}r_{kin,i}}{r_{diff,i}+r_{kin,i}}
+\end{equation}
+
+\begin{equation} \label{Kueq12}
+    r_{diff,i} = C_i \frac{[(T_p + T_g)/2]^{0,75}}{d_p}
+\end{equation}
+
+\begin{equation} \label{Kueq13}
+    r_{kin,i} = A_iT_p \text{exp} \left(- \frac{E_i}{RT_p} \right)
+\end{equation}
+
+Onde $m_{C-i}$ é a massa do carvão restante na partícula quando o carvão reage com espécies gaseificantes $i$ ($=\text{CO}_2$, ou $\text{H}_2 \text{O}$), $p_i$ é a pressão parcial das espécies gaseificantes, $r_{diff,i}$ e $r_{kin,i}$ são a taxa de difusão e a taxa cinética, respectivamente. $C_i$ é a constante da taxa de difusão de massa. $A_i$ e $E_i$ são os parâmetros típicos das formas de Arrhenius das taxas cinéticas. Para a biomassa de madeira considerada no presente estudo, as constantes usadas para as taxas cinéticas e de difusão são monstadas na Tabela \ref{Kutab1} (Abani e Ghoniem, 2013).
+
+
+\begin{table}[h]
+    \centering
+    \caption{Heterogeneous reaction constants.}
+    \vspace{0.2cm}
+    \begin{tabular}{lc}
+        \toprule
+        \textbf{Parameters} & \textbf{Values} \\
+        \midrule
+        $A_{\text{H}_2O}$ (s/(m K)) & $45,6$ \\
+        $E_{\text{H}_2O}$ (J/kmol) & $4,37 \times 10^7$ \\
+        $A_{\text{CO}_2}$ (s/(m K)) & 8,3 \\
+        $E_{\text{CO}_2}$ (J/kmol) & $4,37 \times 10^7$ \\
+        $C_i \ (i=\text{H}_2\text{O}, \text{CO}_2)$ (s/K\textsuperscript{0.75}) & $5,0 \times 10^{-12}$ \\
+        \bottomrule
+    \end{tabular}
+    \label{Kutab1}
+\end{table}
+
+\subsubsection{Encolhimento de partículas}
+
+A química do carvão-gás consome os sólidos e as partículas de biomassa encolhem conforme reagem com a fase gasosa. A contração de partículas não só tem um efeito na gaseificação, mas também afeta fortemente a trajetória das partículas em seu caminho para fora do reator. SEm a contração de partículas, o arrastamento de carvão será altamente superestimado. Aqui, assumimos que a densidade de partículas ($\rho_p$) permanece constante durante todo o processo de gaseificação e uma contração proporcional à massa é adotada para cada partícula de biomassa. Assim, o diâmetro da particula de biomassa encolhe de acordo com a Eq. \ref{Kueq14} (Bruchmuller \text{et al.}, 2012).
+
+\begin{equation} \label{Kueq14}
+    d_p = \left(\frac{6m_p}{\pi \rho_p} \right)^{1/3}
+\end{equation}
+
+\subsubsection{Fase gasosa contínua}
+
+A fase gasosa é modelado como contínua, conheido como um modelo do tipo Euleriano.
+
+\subsubsection{Movimento da fase gasosa}
+
+Para a fase gasosa contínua, as equações de massa, quantidade de movimento linear, energia e transporte de espécies que modelam podem ser tipicamente representadas pelas seguintes equações:
+
+Massa:
+
+\begin{equation} \label{Kueq15}
+    \frac{\partial}{\partial t}(\varepsilon_g \rho_g) + \nabla \cdot (\varepsilon_g \rho_g \bm{u}_g) = S_{p,m}
+\end{equation}
+
+Quantidade de movimento linear:
+
+\begin{equation} \label{Kueq16}
+    \frac{\partial}{\partial t}(\varepsilon_g \rho_g \bm{u}_g) + \nabla \cdot (\varepsilon_g \rho_g \bm{u}_g\bm{u}_g) = -\nabla p + \nabla \cdot (\varepsilon_g \bm{\tau}_{eff}) + \varepsilon_g \rho_g \bm{g} + S_{p,mom}
+\end{equation}
+
+Energia:
+
+\begin{equation} \label{Kueq17}
+    \frac{\partial}{\partial t}(\varepsilon_g \rho_g E) + \nabla \cdot (\varepsilon_g \bm{u}_g(\rho_g E + p)) = \nabla \cdot (\varepsilon_g \alpha_{eff} \nabla h_s) + S_h + S_{p,h} + S_{rad}
+\end{equation}
+
+\begin{equation} \label{Kueq18}
+    E = h_s - \frac{p}{\rho_g} + \frac{u_g^{2}}{2}
+\end{equation}
+
+Espécies:
+
+\begin{equation} \label{Kueq19}
+    \frac{\partial}{\partial t}(\varepsilon_g \rho_g Y_i) + \nabla \cdot (\varepsilon_g \rho_g \bm{u}_g Y_i) = \nabla \cdot (\varepsilon_g \rho_g D_{eff} \nabla Y_i) + S_{p,Y_i} + S_{Y_i}
+\end{equation}
+
+Note que as equações de balanço acima levaram em conta a fração de volume do gás $\varepsilon_g$ e são aplicáveis ao fluxo denso e reativo de gás-partícula em leitos fluidizados estudado este artigo. Elas são diferentes das de Kumas e Ghomiem (2012) que não consideram $\varepsilon_g$ e são adequadas apensas para fluxos de gás-partícula muito diluídos.
+
+Neste artigo, o tensor de tensão efetiva, $\bm{\tau}_{eff}$, é a soma das tensões viscosas e turbulentas. Da mesma forma, a difusividade térmica dinâmica efetiva $\alpha_{eff}$ e o coeficiente de difusão de massa para espécies $D_{eff}$ levam em consideração tanto as contribuições viscosas quanto turbulentas. O modelo de radiação P-1 é adotado para resolver o termo fonte de radiação $S_{rad}$ como geralmente foi escolhido em simulações de CFD de gaseificação de combustível pulverizado com espalhamento de radiação (Backreedy \textit{et al., 2006}).
+
+Conforme mostrado pela Eq. \ref{Kueq19}, uma equação de transporte é resolvida para cada espécie de gás, e as propriedades totais da fase gasosa são calculadas a partir das frações de massa das espécies de gás que compõem a mistura de gases. A massa, quantidad ede movimento linear e entalpia Eqs. \ref{Kueq15}, \ref{Kueq16} e \ref{Kueq17}, respectivamente, são resolvidas em cada passo de tempo para a mistura de gases. O fluxo é compressível, e a pressão, volume, temperatura, e densidade da fase gasosa são relacionados por meio de equações de estado.
+
+Para resolver a turbulência, as equações de balanço que regem para $k$ e $\varepsilon$, que levam em conta a fração de volume do gás $\varepsilon_g$ e são adequadas para nosso sistema de simulação de gás denso-partícula,são as seguintes (Kumas e Ghoniem, 2012, Wang \textit{et al.}, 2009),
+
+\begin{equation} \label{Kueq20}
+    \frac{\partial}{\partial t}(\varepsilon_g \rho_g k) + \nabla \cdot (\varepsilon_g \rho_g \bm{u}_g k) = \nabla \cdot \left(\varepsilon_g \left(\mu_g + \frac{\mu_t}{\sigma_k} \right) \nabla k \right) + \varepsilon_g G_k - \varepsilon_g \rho_g \varepsilon
+\end{equation}
+
+\begin{equation} \label{Kueq21}
+    \frac{\partial}{\partial t}(\varepsilon_g \rho_g \varepsilon) + \nabla \cdot (\varepsilon_g \rho_g \bm{u}_g \varepsilon) =  \nabla \cdot \left(\varepsilon_g \left(\mu_g + \frac{\mu_t}{\sigma_{\varepsilon}} \right) \nabla \varepsilon \right) + \varepsilon_g \frac{\varepsilon}{k}(C_{\varepsilon 1} G_k - C_{\varepsilon 2} \rho_g \varepsilon)
+\end{equation}
+
+As constantes $C_{\varepsilon 1} = 1,44$, $C_{\varepsilon 2}=1,92$, $\sigma_k=1,0$, e $\sigma_{\varepsilon}$. A viscosidade turbulenta $\mu_t$ é calculada como uma função de $k$ e $\varepsilon$,
+
+\begin{equation} \label{Kueq22}
+    \mu_t = \rho_g C_{\mu} \frac{k^{2}}{\varepsilon}
+\end{equation}
+
+Onde $C_{\mu}$ é uma constante definida como 0,09.
+
+\subsubsection{Reações da fase gasosa}
+
+Existem centenas de reações químicas em fase gasosa em um reator de gaseificação. Mesmo que todas as reações elementares e suas taxasde reação pudessem ser identificadas, não é possível calcular um número tão grande de reações acopladas. Para simplificar, um conjunto de 2 reações globais (3 reações considerando reação reserva) é usado para descrever as principais taxas de conversão no reator e o efeito da turbulência nas reações é resolvido pelo modelo de reator parcialmente agitado (PaSR) (Abani e Ghoniem, 2013). As reações de reação química e suas taxas de reação, bem como as refêrencias adotadas estão listadas na Tabela \ref{Kutab2}. A taxa de reação está em $\text{kmol}/(\text{m}^{3}\text{s})$, and $[\cdot]$ implica concentração molar $\text{kmol}/(\text{m}^{3})$ das espécies gasosas entre colchetes. As reações R3 são o consumo de $\text{CH}_4$ por meio da reforma a vapor. A reação R4 é conhecida como reação de deslocamento reversível de água-gás. Ambas as taxas re reação direta $k_f$ e a taxa de reação reversa $k_b$ de R4 são calculadas em vez de uma taxa combinada direta-reversa e $k_f$ e $k_b$ são relacionados pela constante de equilíbrio $k_{eq} = k_f/k_b$.
+
+\begin{table}[h]
+\centering
+\caption{Reações químicas homogêneas e suas taxas de reação.}
+\footnotesize
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Reactions} & \textbf{Reaction rate} & \textbf{Refs} \\
+\hline
+CH$_4$ + H$_2$O $\rightarrow$ CO + 3H$_2$  (R3) & $k = 3.0 \times 10^6 [\text{CH}_4][\text{H}_2\text{O}] \exp\left(-\frac{1.26 \times 10^9}{RT}\right)$ & Jones and Lindstedt (1988) \\
+\hline
+CO + H$_2$O $\rightarrow$ CO$_2$ + H$_2$  (R4) & $k_w = 2.78 \times 10^7 [\text{CO}][\text{H}_2\text{O}] \exp\left(-\frac{1.26 \times 10^7}{RT}\right)$ & Gómez-Barca and Lechner (2010) \\
+\hline
+ &  $k_w = 9.59 \times 10^7 [\text{CO}_2][\text{H}_2] \exp\left(-\frac{4.66 \times 10^7}{RT}\right)$ & \\
+\hline
+ &  $k_{eq} = 0.028 \exp\left(\frac{3.40 \times 10^7}{RT}\right)$ & \\
+\hline
+\end{tabular}
+\label{Kutab2}
+\end{table}
+
+\subsection{Modelagem Computacional}
+
+Na Tabela \ref{Kutab2_1} tem-se as informações referente aos métodos utilizadas para a simulação computacional.
+
+\begin{table}[h]
+\centering
+\caption{Modelos computacionais.}
+\footnotesize
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Informação} & \textbf{Descrição} \\
+\hline
+Partículas discretas & Esquema de integração temporal de Euler de $1^{\text{a}}$ ordem  \\ 
+\hline
+Colisões entre partículas/ partículas e paredes & Colisão de esferas macias (Tsuji \textit{et al.}, 1992\cite{TSUJI1992}) \\
+\hline
+Temperatura, diâmetro, composição e capacidade térmica & Submodelos de secagem, pirólise e gaseificação \\
+\hline
+Fase gasosa contínua & Discretização temporal pelo esquema de Euler \\ 
+ & Discretização espacial por volumes finitos \\
+\hline
+Acoplamento entre as partículas discretas e a fase gasosa & Termos fontes $S_{p,m}$, $S_{p,mom}$, $S_{p,h}$ e $S_{p,Yi}$ \\
+\hline
+Software e implementação & OpenFOAM e caixa de ferramentas em C++ \\
+\hline
+Tempo de simulação & 20 s \\
+\hline
+\end{tabular}
+\label{Kutab2_1}
+\end{table}
+
+Os dados experimentais de um reator de leito fluidizado de biomassa em escala laboratorial foram extraídos de Song \textit{et al.}(2012)\cite{SONG2012}.
+
+O domínio computacional é composto pelas paredes, pelo orifício e a saída superior. Inicialmente o reator é preenchido completamente com $N_2$ e um leito de areia compacto composto por 40 000 partículas esféricas de areia com diâmetro de 1,5 mm. A temperatura inicial da areia e do gás no domínio é definida como igual à temperatura de operação do reator ($T_r$). Nas paredes são impostas condições de não escorregamento para a fase gasosa e a temperatura da parede é especificada de acordo com a temperatura operacional do reator. Na saída superior, a condição de contorno de pressão atmosférica é adotada e as partículas podem sair do domínio computacional durante a simulação, modelando um fenômeno de arraste de sólidos finos.
+
+A biomassa é alimentada através do orifício inferior, juntamente com uma mistura de vapor e nitrogênio.
+
+\begin{table}[h!]
+\centering
+\caption{Pine wood properties \cite{SONG2012}.}
+\begin{tabular}{lccc}
+\hline
+\textbf{Proximate analysis } & & \textbf{Elemental analysis} \\
+\textbf{(wt\%, on the as-received basis)} & & \textbf{(wt\%, on the daf basis)} \\
+\hline
+Moisture       & 11.89 & C     & 46.29 \\
+Ash            & 1.56  & H     & 6.48  \\
+Volatile       & 71.78 & O     & 46.08 \\
+Fixed carbon   & 14.77 & N\&S  & 1.15  \\
+\hline
+\end{tabular}
+\end{table}
+
+%==============================================================================================================================
+\section{Artigo Evrard \textit{et al.} (2019) \cite{EVRARD2019}}
+
+\subsection{Modelagem da dinâmica da interface gás/líquido}
+
+Esta seção descreve brevemente a estrutura Euleriana empregadas nos exemplos e casos de teste apresentados neste artigo. UM esquema de captura de interface de volume de fluido é usado para representar a interface gás/líquido, embora o sudo de um método level-set ou acoplado VOF/level-set exigiria uma mudança mínima no procedimento de acoplamento descrito no restante do manuscrito.
+
+\subsubsection{Equações que modelam o escoamento}
+
+As equações  que modelam o escoamento neste artigo são as equações de balanço de massa e de quantidade de movimento linear para escoamento incompressível.
+
+\begin{equation} \label{Eveq1}
+\nabla \cdot \bm{u} = 0
+\end{equation}
+
+\begin{equation} \label{Eveq2}
+    \rho \left[\frac{\partial \bm{u}}{\partial t} + \nabla \cdot (\bm{u} \otimes \bm{u}) \right] = - \nabla p + \nabla \cdot \bm{\tau} + \rho \bm{g} + \bm{f}_{\sigma}
+\end{equation}
+
+Onde $\rho$ é a massa específica do fluido, $\bm{u}$ o vetor velocidade, $p$ a pressão, e $\bm{g}$ o campo gravitacional. O tensor de tensão deviatórico para um fluido newtoniano, $\bm{\tau}$, é dado por
+
+\begin{equation} \label{Eveq3}
+    \bm{\tau} = \mu (\nabla \bm{u} + (\nabla \bm{u})^{T})
+\end{equation}
+
+Onde $\mu$ é a viscosidade dinâmica do fluido, e a força de tensão interfacial $\bm{f}_{\sigma}$ é definida como
+
+\begin{equation} \label{Eveq4}
+    \bm{f}_{\sigma} = \sigma \kappa \delta_{\Gamma} \bm{n}
+\end{equation}
+
+Onde $\sigma$ é o coeficiente de tensão interfacial, $\kappa$ a curvatura da interface, $\bm{n}$ o vetor normal da interface. Um método de volume de fluido (DeBar, 1974; Hirt e Nichols, 1981) é escolhido para capturar o movimento da interface: as fases de gás e líquido são então representadas implicitamente pela função indicadora $\chi : \mathbb{R}^3 \to \mathbb{R}$ definida como
+
+\begin{equation} \label{Eveq5}
+    \chi(\bm{x},t) =
+    \begin{cases}
+        1 & \text{se } x \in \text{fase líquida} 
+        \\
+        0 & \text{se } x \in \text{fase gasosa}
+    \end{cases}
+\end{equation}
+
+Isso resulta em um campo de função de cor discreta $\gamma$ representando a fração de líquido em cada célula computacional $K$ seguindo
+
+\begin{equation} \label{Eveq6}
+    \gamma_{K} = \frac{1}{V_K} \int_{K} \chi(\bm{x},t)d\bm{x}
+\end{equation}
+
+Onde $V_K$ é o volume da célula $K$. A interface é advectada com base na equação de transporte
+
+\begin{equation} \label{Eveq7}
+    \frac{\partial \gamma}{\partial t} \bm{u} \nabla \gamma = 0
+\end{equation}
+
+Enquanto a massa específica e a viscosidade dinâmica do fluido são obtidas a partir das seguintes relações
+
+\begin{equation} \label{Eveq8}
+    \rho = \rho_l \gamma + \rho_g (1 - \gamma)
+\end{equation}
+
+\begin{equation} \label{Eveq9}
+    \mu = \mu_l \gamma + \mu_g(1- \gamma)
+\end{equation}
+
+Onde os subscritos $g$ e $l$ referem-se às respectivas propriedades do gás e do líquido.
+
+\subsubsection{Considerações de implementação}
+
+As Eqs. \ref{Eveq1} e \ref{Eveq2} são discretizadas usando volumes finitos com um arranjo de variáveis co-localizadas e resolvidas em um único sistema linear de equações acopladas, conforme apresentado em Denner e van Wachem (2014). A Eq. \ref{Eveq7} de transporte é resolvida usando um método de advecção de reconstrução linear por partes Lagrangiana (van Wachem e Schouten, 2002), em associação com um método de avaliação de normais de interface Youngs-centrado misto (Aulisa \textit{et al.},2007). Em relação à modelagem da força de tensão interfacial, o modelo de superfície contínua (CSF) (Brackbill \textit{et al.}, 1992). é empregado: a função de densidade de interface é definida como $\delta_{\Gamma} = |\nabla \gamma|$, e a normal de interface como $\bm{n} = \nabla \gamma |\nabla \gamma|$. A força de interface $\bm{f}_{sigma}$ então assume a forma volumétrica discreta
+
+\begin{equation} \label{Eveq10}
+    \bm{f}_{\sigma} = \sigma \kappa \nabla \gamma
+\end{equation}
+
+\subsection{Modelagem da mistura gás-gotículas}
+
+Partindo do pressuposto de que pequenas gotículas selecionadas permanecem esféricas durante toda a evolução do fluxo, elas podem ser consideradas como partículas indeformáveis cujo movimento é determinado pela segunda lei de Newton, enquanto o movimento do gás circundante é determinado pelas equações de Navier-Stokes. Uma abordagem baseada na édia local pode então ser empregada para modelar a mistura de gotículas de gás e líquido (ou partículas) (Anderson e Jackson, 1967; Drew, 1983; Jackson, 1997; Drew, 1983; Jackson, 1997; Capecelatro e Desjardins, 2013). Tal abordagem permite levar em conta o impacto das partículas no fluxo e vice-versa sem ter que resolver a interação fluido-partícula no comprimento das partículas. Ela se baseia na definição de variáveis médias locais e fornece uma estrutura matemática sólida para a resolução numérica do movimento da mistura de gás-gotículas.
+
+Esta seção aborda a filtragem das equações de fluxo e apresenta uma forma simplificada da segunda lei de Newton para o cálculo das trajetórias de partículas Lagrangianas. A escolha de um núcleo de filtragem e aspectos de suas implementações também são discutidos.
+
+\subsubsection{Frações de volume de fase e decomposição variável}
+
+A média local é ontida por meio de convolução com um núcleo de filtragem suave $g : \mathbb{R}^{+} \rightarrow \mathbb{R}^{+}$, decrescente monoticamente em $\mathbb{R}$, e que é normalizado de modo que
+
+\begin{equation} \label{Eveq11}
+    \begin{split}
+        \int_{\Omega_{\infty}} g(r)dV = \int_{\varphi=0}^{2 \pi} \int_{\theta=0}^{\pi} \int_{r=0}^{\infty} g(r)r^{2} \text{sen}\theta dr d\theta 
+        d\varphi
+        \\
+        =4 \pi \int_{0}^{\infty} g(r)r^{2}dr =1
+    \end{split}
+\end{equation}
+
+Onde $\Omega_{\infty}$ é o espaço tridimensional (Anderson e Jackson, 1967). Embora não seja uma condição necessária para o resto da derivação, $g$ é escolhido para ser compactamente suportado em uma esfera $S_{\delta}$ de raio $\delta$. Usando a função indicadora de fase $\chi$ introduzida na Eq. \ref{Eveq5} e assumindo, em uma primeira instância, que ela é definida em $\Omega_{\infty}$, pode-se definir a fração de volume de gás local como
+
+\begin{equation} \label{Eveq12}
+    \varepsilon_{g}(\bm{x},t) = \int_{\Omega_{\infty}} g(|\bm{x-\bm{y}}|)(1-\chi(\bm{y},t))dV_{\bm{y}} = \int_{\Omega_g(t)} g(|\bm{x}-\bm{y}|)dV_{\bm{y}}
+\end{equation}
+
+E a fração de volume do líquido local (ou gota) como
+
+\begin{equation} \label{Eveq13}
+    \varepsilon_{l}(\bm{x},t) = \int_{\Omega_{\infty}} g(|\bm{x-\bm{y}}|)\chi(\bm{y},t)dV_{\bm{y}} = \int_{\Omega_l(t)} g(|\bm{x}-\bm{y}|)dV_{\bm{y}}
+\end{equation}
+
+$dV_{\bm{y}}$ sendo um elemento de volume infinitesimal centrado em $\bm{y}$. Os subconjuntos $\Omega_{g}(t)$ e $\Omega_l(t)$ representam respectivamente as porções $\Omega_{\infty}$ ocupadas pelas fases gasosa e líquida no tempo $t$, e $\Omega_g(t) \cup \Omega_l(t) = \Omega_{\infty}$. Devido à normalização de $g$, a seguinte equação é satisfeita em todos os lugares e em todos os momentos:
+
+\begin{equation} \label{Eveq14}
+    \varepsilon_g(\bm{x},t) +  \varepsilon_l(\bm{x},t) = 1
+\end{equation}
+
+A filtragem de uma variável pontual $\phi$ da fase gasosa resulta em uma quantidade filtrada $\bar{\phi}$ tal que
+
+\begin{equation} \label{Eveq15}
+    \varepsilon_g(\bm{x},t) \bar{\phi}(\bm{x},t) = \int_{\Omega_g(t)} g(|\bm{x}-\bm{y}|) \phi(\bm{y},t)dV_{\bm{y}}
+\end{equation}
+
+Da mesma forma, a filtragem de uma variável de ponto líquido $\psi$ segue
+
+\begin{equation} \label{Eveq16}
+    \varepsilon_l(\bm{x},t) \bar{\psi}(\bm{x},t) = \int_{\Omega_l(t)} g(|\bm{x}-\bm{y}|) \psi(\bm{y},t)dV_{\bm{y}}
+\end{equation}
+
+Uma variável pontual pode, portanto, ser decomposta em um componente filtrado (ou médio) e um componente de flutuação em torno de usa média, produzindo, por exemplo,
+
+\begin{equation} \label{Eveq17}
+    \phi (\bm{x},t) = \bar{\phi}(\bm{x},t) + \phi'(\bm{x},t)
+\end{equation}
+
+\subsubsection{Filtragem das equações de fluxo}
+
+
+
+
+
+
+
+
+
+
+
+%===============================================================================================================================
+\section{Artigo Yang \textit{et al.} (2022) \cite{Yang2022}}
+
+\subsection{Formulação matemática}
+
+\subsubsection{Equações para modelagem da fase gasosa}
+
+                                       
+
+\begin{equation} \label{eq1}
+   \frac{\partial\left(\alpha_g \bar{\rho}_g\right)}{\partial t}+\nabla \cdot\left(\alpha_g \bar{\rho}_g \widetilde{\bm{u}}_g\right)=\bar{S}_m
+\end{equation}
+
+Onde, $\overline{()}$ denota a média de Reynolds, $\widetilde{()}$ denota a média de Frave, $\alpha_g$ é a fração volumétrica do gás, $\rho_g$ é a densidade do gás, $\bm{u}_g$ é o vetor de velocidade do gás e $S_m$ representa a taxa de formação de gás devido à conversão termoquímica das partículas de combustível.
+
+Em Eq. \ref{eq2}, tem-se a equação da quantidade de movimento linear.
+
+\begin{equation}\label{eq2}
+    \frac{\partial\left(\alpha_g \bar{\rho}_g \widetilde{\bm{u}}_g\right)}{\partial t}+\nabla \cdot\left(\alpha_g \bar{\rho}_g \tilde{\bm{u}}_g \tilde{\bm{u}}_g\right)=\alpha_g \bar{\rho}_{\bm{g}} \bm{g}-\alpha_g \nabla \bar{p}_g+\nabla \cdot\left(\alpha_g \bar{\tau}_g\right)+\overline{\bm{{S}_u}}
+\end{equation}
+
+Onde $\bm{g}$ é o campo gravitacional, $p_g$ é a pressão do gás, $\tau_g$ é a soma da tensão viscosa e da tensão de Reynolds, e $\bm{S}_u$ é o termo fonte devido a troca de quantidade de movimento linear entre o gás e a fase sólida.
+
+A equação da energia é dada pela Eq. \ref{eq3}.
+
+\begin{equation}\label{eq3}
+\begin{aligned}
+& \frac{\partial\left(\alpha_g \bar{\rho}_g(\tilde{h}+\tilde{K})\right)}{\partial t}+\nabla \cdot\left(\alpha_g \bar{\rho}_g \tilde{\bm{u}}_g(\tilde{h}+\widetilde{K})\right)=\alpha_g \bar{\rho}_g \tilde{\bm{u}}_g \cdot \bm{g}+\frac{\partial \alpha_g \bar{p}_g}{\partial t} \\
+& +\nabla \cdot\left(\alpha_g \bar{\rho}_g \Gamma_{e f f} \nabla \tilde{h}\right)+\alpha_g \dot{Q}_r+\alpha_g \dot{Q}_{c o m}+\bar{S}_q
+\end{aligned}
+\end{equation}
+
+Onde $h$ é a entalpia espefífica, $K$ é a energia cinética do fluxo de gás e $\Gamma_{eff}$ é a soma dos coeficientes de difusão de calor molecular turbulento, $\Gamma_{eff}=\Gamma_g + \mu_t/(\bar{\rho_g}Pr_t)$, onde $Pr_t$ é o número de Prandtl turbulento e $\mu_t$ é a viscosidade turbulenta. $\bar{\dot{Q}}_r$ é o termo fonte  médio devido à transferência de energia térmica por radiação, $\bar{\dot{Q}}_{com}$ é o termo fonte devido às reações químicas voláteis e $\bar{S}_q$ é o termo médio devido à conversão termoquímica do combustível sólido. 
+
+Na Eq. \ref{eq4}, tem-se a equação para o transporte das espécies.
+
+\begin{equation}\label{eq4}
+\frac{\partial\left(\alpha_g \bar{\rho}_{\mathrm{g}} \tilde{Y}_{\mathrm{g}, \mathrm{k}}\right)}{\partial t}+\nabla \cdot\left(\alpha_g \bar{\rho}_g \tilde{\bm{u}}_{\mathrm{g}} \tilde{Y}_{g, k}\right)= \nabla \cdot\left(\alpha_g \bar{\rho}_g D_{e f f} \nabla \tilde{Y}_{\mathrm{g}, \mathrm{k}}\right)+\alpha_g \bar{\dot{\omega}}_{g, k} +\bar{S}_{Y_k}
+\end{equation}
+
+Onde $Y_{g,k}$ é a fração de massa da espécie $k$ na mistura de gases, e $\bar{\dot{w}}_{g,k}$ é a taxa média de reação química da espécie $k$. $D_{eff}$ é o coeficiente de defisão de massa efetivo para a espécie $k$ levando em consideração as contribuições viscosa e turbulenta, $D_{eff} = D_g + \mu_t/(\bar{\rho}_g Sc_t)$, onde $Sc_t$ é o número de Schmidt turbulento. $\bar{S}_{Y_k}$ é a taxa média de formação da espécie $k$ devido à conversão termoquímica das partículas de combustível sólido.
+
+Um modelo de reator parcialmente agitado é utilizado para contabilizar a interação química da turbulência ao calcular os termos fonte devidos às reações químicas da fase gasosa ($\dot{w}_{g,k}, \dot{Q}_{com}$). Nesse modelo, as taxas médias de reação são modeladas de acordo com a Eq. \ref{eq5}.
+
+\begin{equation}\label{eq5}
+    \overline{\dot{\omega}}_{g, k}=\kappa \dot{\omega}_{g, k}(\tilde{Y}, \widetilde{T}, \bar{p})
+\end{equation}
+
+Onde $\kappa$ é a fração de volume da mistura reativa, $\kappa=\frac{\tau_C}{\tau_c+\tau_m}$, $\tau_{C}$  e $\tau_m$ denotam o tempo de reação química local e o tempo de mistura local, respectivamente. O tempo de reação química, $\tau_C$, é determinado a partir das taxas médias de reação do combustível $\bar{\dot{w}}_f$ e do oxidante ou dos agentes de gaseificação $\bar{\dot{w}}_o$, de acordo com a Eq. \ref{eq6}.
+
+\begin{equation}\label{eq6}
+    \frac{1}{\tau_c}=\max \left\{\frac{-\overline{\dot{\omega}}_f}{Y_f}, \frac{-\overline{\dot{\omega}}_o}{Y_o}\right\}
+\end{equation}
+
+Onde os subscritos $f$ e $o$ denotam o combustível e o oxidante ou os agentes de gaseificação, respectivamente. A Eq. \ref{eq7} modela o tempo de mistura $\tau_m$.
+
+\begin{equation}\label{eq7}
+    \tau_m=C_{m i x} \sqrt{\frac{\nu}{\varepsilon}}
+\end{equation}
+
+Onde $C_{mix}$ é uma constente do modelo ($C_{mix}$=1 neste estudo). $\nu$ e $\varepsilon$ denotam a viscosidade cinemática e a potência específica de tranformação de energia cinética turbuenta em energia térmica, respectivamente.
+
+O tensor de tensão $\bar{\tau}_g$ na Eq. \ref{eq2} é a soma das tensões viscosas e de REynolds, e pode ser escrito segundo a Eq. \ref{eq8}.
+
+\begin{equation}\label{eq8}
+    \bar{tau}_g = \bar{\tau}_l +\bar{\tau}_t
+\end{equation}
+
+O tensor de tensão para um fluido newtoniano é expresso na Eq. \ref{eq9}.
+
+\begin{equation} \label{eq9}
+    \bar{\tau}_l = \mu_g ((\nabla \tilde{\bm{u}}_g) + (\nabla \tilde{\bm{u}}_g)^{T} - \frac{2}{3} (\nabla \cdot \tilde{\bm{u}}_g ) \bm{I})
+\end{equation}
+
+E as tensões de Reynolds são modeladas de acordo com a equação \ref{eq10}.
+
+\begin{equation}\label{eq10}
+  \bar{\tau}_t = \mu_t \left( (\nabla \tilde{\bm{u}}_g) + (\nabla \tilde{\bm{u}}_g)^T - \frac{2}{3} (\nabla \cdot \tilde{\bm{u}}_g) \bm{I} \right) - \frac{2}{3} \bar{\rho}_g k \bm{I}
+\end{equation}
+
+Onde $\mu_g$ é a viscosidade dinâmica, $\bm{I}$ é o tensor unitário de segunda ordem. O modelo $k-\varepsilon$ padrão é ussado para determinar a viscosidade turbulenta, $\mu_t = \rho_{g} C_{\mu} k^{2} / \varepsilon$, onde $k$ é a energia cinética turbulenta. $k$ e $\varepsilon$ são modelados usando as equações de balanço Eq. \ref{eq11} e Eq. \ref{eq12}, respectivamente.
+
+\begin{equation} \label{eq11}
+    \frac{\partial \left( \alpha_g \bar{\rho}_g k \right)}{\partial t} 
++ \nabla \cdot \left( \alpha_g \bar{\rho}_g \tilde{\bm{u}}_g k \right) 
+= \nabla \cdot \left( \alpha_g \left( \mu_g + \frac{\mu_t}{\sigma_k} \right) \nabla k \right) 
++ \alpha_g P_k - \alpha_g \bar{\rho}_g \varepsilon + S_k
+\end{equation}
+
+\begin{equation} \label{eq12}
+\frac{\partial \left( \alpha_g \bar{\rho}_g \varepsilon \right)}{\partial t} 
++ \nabla \cdot \left( \alpha_g \bar{\rho}_g \tilde{\bm{u}}_g \varepsilon \right) 
+= \nabla \cdot \left( \alpha_g \left( \mu_g + \frac{\mu_t}{\sigma_\varepsilon} \right) \nabla \varepsilon \right) 
++ \alpha_g \frac{\varepsilon}{k} \left( C_{\varepsilon_1} P_k - C_{\varepsilon_2} \bar{\rho}_g \varepsilon \right) + S_\varepsilon,
+\end{equation}
+
+Onde $P_k = \tau_t : \nabla \tilde{\bm{u}}_g$ é a \red{taxa de produção de energia cinética turbulenta}. \black
+$S_k$ e $S_{\varepsilon}$ são os termos de origem devido à iteração gás-sólido. Valores padrão das constantes do modelo são usados, $C_{\mu} = 0,09$, $C_{\varepsilon_1} = 1,44$, $C_{\varepsilon_2} = 1,92$, $C_{\sigma k} = 1,0$ e $C_{\sigma \varepsilon}$. 
+
+\subsubsection{Equações que modelam a fase sólida} \label{sec2_2}
+
+O modelo de reação de pirólise de uma etapa é dada pela Eq. \ref{eq13}.
+
+\begin{equation} \label{eq13}
+\text{Biomass} \rightarrow x_1\text{CO} + x_2\text{CO}_2 + x_3\text{H}_2\text{O} + x_4\text{H}_2 + x_5\text{CH}_4 + x_6\text{Ash(S)} + x_7\text{C(S)}
+\end{equation}
+
+Onde $x_{j}$ são as constantes estequiométricas. $Ash_{(s)}$ e $C_{(s)}$ denotam respectivamente a cinza e o carvão que estão em fase sólida.
+
+A equação de balanço de masssa para a partícula de biomassa $i$ é dada pela Eq. \ref{eq14}.
+
+\begin{equation}\label{eq14}
+\frac{dm_i}{dt} = \dot{m}_i = \dot{m}_{\text{vapor},i} + \dot{m}_{\text{devol},i} + \dot{m}_{\text{char},i}
+\end{equation}
+
+Onde $\dot{m}_{\text{vapor},i}$, $\dot{m}_{\text{devol},i}$ e $\dot{m}_{\text{char},i}$ denotam a taxa de evaporação, a taxa de desvolatização e a taxa de conversão de carvão, respectivamente. A taxa de evaporação de umidade é modelada na Eq. \ref{eq15}.
+
+\begin{equation} \label{eq15}
+\dot{m}_{\text{vapor},i} = \frac{\text{ShD}_{\text{dif}f,va}}{d_i} \left( \frac{P_{\text{sat},T_i}}{\text{R}_u T_{i,\bar s}} - \mathsf{X}_\nu \frac{p_g}{\text{R}_u T_{i, s}} \right) A_{S_i} M_\nu
+\end{equation}
+
+Onde $Sh$ é o número de Sherwood, que é modelado usando a correlação de Ranz-Marshall, $sH = (2+0,6 Re_{i}^{1/2}Sc^{1/3})$. $Re_{i}$ é o número de Reynolds com base no tamanho da partícula e na velocidade relativa entre a i-ésima partícula e o gás circundante. $D_{diff,va}$, $P_{sat,T_{i}}$, $As_{i}$, $T_{i,s}$, $X_{\nu}$, and $M_{\nu}$ representam respectivamente o coeficiente de difusão de vapor, a pressão de saturação, a área de superfície da partícula, a temperatura de superfície, a fração molar de vapor no gás circundante e o peso molar do vapor. $R_u$ é a constante universal dos gases. $d_i$ é um diâmetro de partícula de esfera equivalente calculando com base na massa da partícula $m_i$ e uma densidade de partícula constante $\rho_i$, ou seja, $d_i=(6m_i/\pi \rho_i)^{1/3}$.
+
+A taxa de desvolatização é calculada com base no modelo de reação de pirólise (Eq. \ref{eq13}).
+
+\begin{equation} \label{eq16}
+\dot{m}_{\text{devol},i} = -A_d \exp\left(-\frac{E_d}{R_u T_i}\right) m_{\text{volat},i}
+\end{equation}
+
+Onde $A_d = 5,0 \times 10^{6} [\text{s}^{-1}]$ e $E_d = 1,2 \times 10^{8} [\text{J}/\text{Kmol}]$ são constantes de taxa, $m_{volat,i}$ é a massa do volátil restante na partícula. A taxa de conversão é calculada com base nas reações heterogêneas (R7, R8 e R9) listadas na Tabela \ref{tab1} (\cite{Yang2022}). 
+
+\begin{equation} \label{eq17}
+\dot{m}_{\text{char},i} = \sum_{j=1}^3 \dot{m}_{\text{char},ij}
+\end{equation}
+
+\begin{table}[h!]
+\centering
+\caption{Reações homogêneas e heterogêneas consideradas na combustão e gaseificação de biomassa. Nota: \( C_{(s)} \) is solid phase char. \( C_k \) represents molar concentration of gas species \( k \).}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Reference} & \textbf{Homogeneous reactions} & \textbf{Kinetic rate [Kmol/m\(^3\)/s]} \\
+\hline
+R1 [31,36] & CH\(_4\) + H\(_2\)O \(\rightarrow\) CO + 3H\(_2\) & \( R_1 = 0.312 \exp\left(-\frac{15,098}{T_g}\right) C_{CH_4} C_{H_2O} \) \\
+R2 [31,36] & CO + H\(_2\)O \(\rightarrow\) CO\(_2\) + H\(_2\) & \( R_2 = 2.5 \times 10^8 \exp\left(-\frac{16,597}{T_g}\right) C_{CO} C_{H_2O} \) \\
+R3 [31,36] & CO\(_2\) + H\(_2\) \(\rightarrow\) CO + H\(_2\)O & \( R_3 = 9.43 \times 10^9 \exp\left(-\frac{20,563}{T_g}\right) C_{CO_2} C_{H_2} \) \\
+R4 [31,36] & CH\(_4\) + 2O\(_2\) \(\rightarrow\) CO\(_2\) + 2H\(_2\)O & \( R_4 = 2.119 \times 10^{11} \exp\left(-\frac{24,379}{T_g}\right) C_{CH_4} C_{O_2} \) \\
+R5 [31,36] & CO + 0.5O\(_2\) \(\rightarrow\) CO\(_2\) & \( R_5 = 1.0 \times 10^{10} \exp\left(-\frac{15,154}{T_g}\right) C_{CO} C_{O_2} \) \\
+R6 [31,36] & H\(_2\) + 0.5O\(_2\) \(\rightarrow\) H\(_2\)O & \( R_6 = 2.2 \times 10^9 \exp\left(-\frac{13,109}{T_g}\right) C_{H_2} C_{O_2} \) \\
+\hline
+\textbf{Reference} & \textbf{Heterogeneous reactions} & \textbf{Kinetic rate [s/m]} \\
+\hline
+R7 [40,43] & \( C_{(s)} + 0.5O_2 \rightarrow CO \) & \( R_7 = 0.046 \times 10^7 \exp\left(-\frac{13,523}{R_u T_i}\right) \) \\
+R8 [40,43] & \( C_{(s)} + H_2O \rightarrow CO + H_2 \) & \( R_8 = 1.71 \times 10^7 \exp\left(-\frac{211,000}{R_u T_i}\right) \) \\
+R9 [40,43] & \( C_{(s)} + CO_2 \rightarrow 2CO \) & \( R_9 = 9.1 \times 10^6 \exp\left(-\frac{166,000}{R_u T_i}\right) \) \\
+\hline
+\end{tabular}
+\label{tab1}
+\end{table}
+
+Onde $\dot{m}_{char,ij}$ representam as taxas de consumo de carvão por reações com $\textbf{O}_2$ ($j=1$, reação R7), $\textbf{H}_2\textbf{O}$ ($j=2$, reação R8), e $\textbf{CO}_2$ ($j=3$, reação R9).
+
+\begin{equation} \label{eq17}
+\dot{m}_{\mathrm{char},ij} = -A s_i p_j \frac{R_{\mathrm{diff},j} R_{\mathrm{kin},j}}{R_{\mathrm{diff},j} + R_{\mathrm{kin},j}}
+\end{equation}
+
+\begin{equation} \label{eq19}
+R_{\mathrm{diff},j} = C_j \frac{[0.5(T_g + T_i)]^{0.75}}{d_i}
+\end{equation}
+
+\begin{equation} \label{eq20}
+R_{\mathrm{kin},j} = A_j \exp\left(-\frac{E_j}{R_u T_i}\right)
+\end{equation}
+
+Onde $R_{dif,j}$, $R_{kin,j}$, $C_{j}$, $T_{g}$, $p_{g}$, $A_j$ e $E_{j}$ representam respectivamente o coeficiente da taxa de difusão, o coeficiente da taxa cinética, a constante da taxa de difusão de massa, a temperatura do gás, a pressão parcial das espécies gaseificantes no gás que circunda a partícula e as constantes da taxa de Arrhenius para reações de carvão com as espécies $\text{O}_2$, $\text{H}_2\text{O}$ e $\text
+{CO}_2$ (R7, R8 e R9 na Tabela \ref{tab1}). $C_j = 5 \times 10^{-12} (\text{s}/\text{K}^{0,75})$.
+
+\subsubsection{Equações de quantidade de movimento linear}
+
+A cinemática da i-ésima partícula simulada é modelada pela segunda lei de Newton, Eq. \ref{eq21}.
+
+\begin{equation} \label{eq21}
+\frac{d\bm{u}_i}{dt} = \frac{\beta}{\rho_i \theta} \left(\bm{u}_g - \bm{u}_i\right) + \bm{g} \left(1 - \frac{\rho_g}{\rho_i}\right) - \frac{1}{\rho_i} \nabla p_g - \frac{1}{\rho_i \theta} \nabla \tau
+\end{equation}
+
+Onde $\bm{u}_i$, $\rho_i$ e $\theta$ denotam respectivamente a velocidade e a densidade da i-ésima partícula e a fração de volume sólido na posição espacial $\bm{x}_i$ no tempo $t$. Os termos do lado direito representam a soma de todas as forças que atuam na i-ésima partícula pelo gás e partículas circundantes. As forças consideradas incluem, da esquerda para a direita, o arrasto, gravidade, gradiente de pressão e a tensão interpartícula. A força de massa virtual, força de Basset e força de sustentação, como a força de Saffman e a força de Magnus, que desempenham um papel no movimento das partículas, são negligenciadas. Com um dado $\bm{u}_i$, a posição da partícula é computada pela integração da Eq. \ref{eq22}.
+
+\begin{equation} \label{eq22}
+    d\bm{x}_i/dt = \bm{u}_i
+\end{equation}
+
+Na Eq. \ref{eq21}, a freação de volume sólido é modelada pela Eq. \ref{eq23}.
+
+\begin{equation} \label{eq23}
+\theta\left( \bm{x}_i, t\right) = \iint f(m_i, \bm{u}_i, \bm{x}_i, t) \left( \frac{m_i}{\rho_i}\right) dm_i \, d\bm{u}_i
+\end{equation}
+
+Onde $f(m_i, \bm{u}_i, \bm{x}_i, t)$ é uma função de distribuição de pertículas, que descreve a distribuição estatística de massa e velocidade de partículas na posição espacial $\bm{x}_i$ no tempo $t$. Ou seja, $f(m_i, \bm{u}_i, \bm{x}_i, t)dm_id\bm{u}_i$ é o número médio de partículas por unidade de volume com velocidades nos intervalos ($\bm{u}_i, \bm{u}_i+d\bm{u}_i$) e massa no intervalo ($m_i, m_i + dm_i$). Neste modelo, assume-se que a função de distribuição de partículas é independente da temperatura e composição das partículas.
+
+No modelo MP-PIC $f$ é obtido a partir da equação de Liouville, que é a expressão matemática do balanço do número de partículas por volume movendo-se ao longo de trajetórias dinâmicas no espaço de fase das partículas, Eq. \ref{eq24}.
+
+\begin{equation} \label{eq24}
+    \frac{\partial f}{\partial t} + \nabla \cdot (f\bm{u}_i) + \nabla_u \cdot (f\bm{A}_i) = \frac{f_G - f}{\tau_G} + \frac{f_D - f}{\tau_D}
+\end{equation}
+ Onde $\bm{A}_i = d\bm{u}_i/dt$ é a aceleração da partícula, $f_G$ é a função de distribuição de partículas isotrópicas de equilíbrio, $f_D$ é a função de distribuição de partículas de amortecimento de colisão, $\tau_G$ e $\tau_D$ são tempos de relaxamento. $\nabla$ e $\nabla_u$ são operadores de divergência com relação ao espaço físico $\bm{x}$ e à velocidade $\bm{u}_i$.
+
+ O modelo de força de arrasto utilizado para a partícula individual $i$ é dado pela Eq. \ref{eq25}.
+
+ \begin{equation} \label{eq25}
+     \bm{f}_i = \frac{V_i \beta}{\theta}(\bm{u}_g - \bm{u}_i)
+ \end{equation}
+
+ Onde $V_i$ é o volume da i-ésima partícula. Nas Eqs. \ref{eq21} e \ref{eq25}, o parâmetro de arrasto $\beta$ é modelado pela Eq. \ref{eq26}.
+
+ \begin{equation}\label{eq26}
+\beta = 
+\begin{cases} 
+150\frac{(1-\alpha_g)^2\mu_g}{\alpha_g^2 d_i^2} + 1,75\frac{(1-\alpha_g)\rho_g}{\alpha_gd_i} |\bm{u}_g - \bm{u}_i| & \alpha_g < 0,8 \\ 
+\frac{3}{4}C_d \frac{(1-\alpha_g)\rho-g}{d_i} |\bm{u}_g - \bm{u}_i|\alpha_g^{-2,65} & \alpha \geq 0,8
+\end{cases}
+ \end{equation}
+
+ Onde $C_d$ é o coeficiente de arrasto, Eq. \ref{eq27}.
+
+ \begin{equation} \label{eq27}
+     C_d =
+\begin{cases}
+\frac{24}{Re_i} (1+ 0,15 Re_i^{0,687}) & Re_{i} < 1000 
+\\
+0,44 & Re_i \geq 1000
+\end{cases}
+ \end{equation}
+
+ E o número de Reynolds da partícula é definido pela Eq. \ref{eq28}
+
+ \begin{equation} \label{eq28}
+     Re_i = \alpha_g \rho_g d_i |\bm{u}_g - \bm{u}_i|/\mu_g
+ \end{equation}
+
+ \subsubsection{Equação da energia}
+
+A temperatura da partícula é obtida a partir da equação de balanço da energia para a i-ésima partícula, dada pela Eq. \ref{eq29}.
+
+\begin{equation}\label{eq29}
+    m_i C_{p,i} \frac{dT_i}{dt} = h_i As_i (T_g - T_i) + \frac{\varepsilon_i As_i}{4} (G- 4\sigma T_i^{4}) - h_{vapor,i} \dot{m}_{vapor,i} - h_{devol,i} \dot{m}_{devol,i} - \sum_{j=1}^{3} h_{i,j} \dot{m}_{char,ij}
+\end{equation}
+
+Onde $C_{p,i}$, $\varepsilon_{i}$, $\sigma$, $h_i=(Nu \lambda_{g,s}/d_i)$, e $G$ representam a capacidade térmica da partícula, emissividade, constante de Stefan-Boltzmann, coeficiente de tranferência térmica interfásica e radiação incidente, respectivamente. $h_{vapor,i}$, $h_{devol,i}$, e $h_{i,j}$ representam o calor latente, o calor da pirólise e os calores das reações de carvão com $\text{O}_2$, $\text{H}_2\text{O}$ e $\text{CO}_2$, respectivamente. $Nu$ é o número de Nusselt, que é modelado usando a correlação de Ranz-Marshall, $Nu= 2 + 3/5Re_i^{1/2}Pr^{1/3}$. $Pr$ é o número de Prandtl do gás circundante, e $\lambda_{g,s}$ representa a condutividade térmica do gás circundante. A radiação incidente $G$ é obtida dp modelo de radiação P-1.
+
+\subsection{Termos fontes para interação partícula/gás}
+
+Na abordagem CGM, um número finito de partículas virtuais (doravante denominados parcelas) é simulado. Suponha que o número de parcelas seja $N_p$. A i-ésima parcela contém múltiplas partículas reais; no entanto, todas as partículas têm as mesmas propriedades, ou seja, cada partícula real na i-ésima parcela tem a mesma massa $m_i$, velocidade $\bm{u}_i$, temperatura $T_i$ e diâmetro $d_i$. As equações que modelam a partícula real individual na i-ésima parcela foram apresentadas na seção \ref{sec2_2}.
+
+No espaço físico $\bm{x}$ no tempo $t$, o número de partículas reais por unidade de volume que pertencem à parcela i è $n_i$. Os termos fonte devido à interação gás/sólido para a equação de continuidade, equação de quantidade de movimento linear, equação de entalpia, e as equações de transporte de espécies são dadas pela Eq. \ref{eq30}.
+
+\begin{equation} \label{eq30}
+ \begin{split} 
+ \bar{S}_m = - \sum_{i=1}^{N_p}n_i\dot{m}_i \\
+ \bar{S}_q = - \sum_{i=1}^{N_p}n_iq_i \\
+  \bar{\bm{S}}_{u} = - \sum_{i=1}^{Np}n_i\bm{f}_i \\
+  \bar{S}_{Y_k} = - \sum_{i=1}^{Np}n_i\dot{m}_{k,i}
+\end{split}
+\end{equation}
+
+Onde $\dot{m}_i= \sum_{k=1}^{N}\dot{m}_{k,i}$ é dado na Eq. \ref{eq14}, $q_i=m_i C_{p,i} \frac{dT_i}{dt}$ é dado na Eq. \ref{eq29}, e $\dot{m}_{k,i}$ é devido à reação de pirólise (Eq. \ref{eq13}) e reações de carbonização (R7, R8 e R9, Tabela \ref{tab1}).
+
+\subsection{Redistribuição espacial de parcelas e termos fonte}
+
+Na abordagem CGM-PCM, a fração de volume sólido em uma dada posição e tempo é calculada usando a Eq. \ref{eq23} com todas as partículas nas parcelas levadas em consideração, e a fração de gás é então dada pela Eq. \ref{eq31}.
+
+\begin{equation} \label{eq31}
+    \alpha_g(\bm{x},t) = 1 - \theta(\bm{x},t)
+\end{equation}
+
+Fisicamente, $\theta(\bm{x},t) < 1$. No entanto, como um grande número de partículas são agrupadas em uma única parcela, cujo volume pode exceder o volume da célula local, isso pode levar a $\theta(\bm{x},t) > 1$ ou $\alpha_g < 0$,  que não é físico e numericamente pode dar origem à instabilidades. Esse problema é particularmente verdadeiro no PCM de baixo custo mais amplamente usado. Neste trabalho, foi proposto um método do kernel de distribuição (DKM), que tem similaridade com o método DBM, ao mesmo tempo em que oferece a vantagem da fácil implementação e baixo custo computacional. Conforme mostrado na Fig. \ref{fig1}, as parcelas em uma célula computacional PCM (marcada como cell-o) são aglomerados de areia e partículas de biomassa do domínio circundante (marcado como uma região circular). Para evitar instabilidade numérica causada por localmente muitas partículas na cell-o, no DKM as partículas e os termos de fonte associados nas parcelas na cell-o são redistribuídos para o domínio circundante do qual as partículas são agrupadas. O algoritmo de redistribuição é construído de tal forma que o volume da fase sólida e os termos de fonte no domínio de redistribuição são conservados antes e depois da distribuição.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{fundamentacao-teorica/fig1.png}
+ \caption{Retirado de \cite{Yang2022}.}
+\label{fig1}
+\end{figure}
+
+Uma função núcleo de filtragem $g(\bm{x},t)$, que é definida com base na distância das células circundantes à cell-o. A integração da função núcleo sobre todo o espaço físico é igual a um. As células circundantes de uma célula local podem ser localizadas por um novo algoritmo de busca de células com base em uma distância dada.
+
+O volume toral da fase sólida em um determinado domínio $\Omega$ é dado pela Eq, \ref{eq32}.
+
+\begin{equation} \label{eq32}
+    V_s = \int_{\Omega} \theta_o(\bm{x},t)dV
+\end{equation}
+
+Onde o subscrito "$o$" indica que a quantidade é antes da redistribuição. A seguir, o subscrito "$r$" será usado para denotar que a quantidade é depois da redistribuição. $V_s$ deve permanecer o mesmo antes e depois da redistribuição.
+
+\begin{equation} \label{eq33}
+    V_s = \int_{\Omega} \theta_o(\bm{x},t)dV \equiv \int_{\Omega} \theta_r(\bm{x},t)dV = \int_{\Omega} g(\bm{x},t)V_sdV
+\end{equation}
+
+O que indica que a fração de volume sólido após a redistribuição é dada pela Eq. \ref{eq34}.
+
+\begin{equation}\label{eq34}
+    \theta_r(\bm{x},t) = g(\bm{x},t)V_s = g(\bm{x},t)\int_{\Omega} \theta_o(\bm{x},t)dV 
+\end{equation}
+
+Uma função de redistribuição simples $g'(\bm{x},t)$ é empregada na Eq. \ref{eq35}.
+
+\begin{equation} \label{eq35}
+    g'(\bm{x},t) = \left(1- \frac{|\bm{x} - \bm{x}_o|}{d_{max}} \right)^{2}
+\end{equation}
+
+Onde $\bm{x}_o$ é a posição do centroide da cell-o. $d_{mas}$ é uma distância prescrita dentro da qual o volume da fase sólida e os termos fonte serão redistribuídos. A função $g'(\bm{x},t)$ pode não satisfazer a Eq. \ref{eq33}. Pela normalização de $g'(\bm{x},t)$, a função de filtragem do núcleo $g(\bm{x},t)$ pode ser obtida de $g'(\bm{x},t)$, Eq. \ref{eq36}.
+
+\begin{equation} \label{eq36}
+    g(\bm{x},t) = g'(\bm{x},t) / \int_{\Omega}g'(\bm{x},t)dV
+\end{equation}
+
+ou seja,
+
+\begin{equation} \label{eq37}
+    \int_{\Omega}g(\bm{x},t)dV=1
+\end{equation}
+
+$g(\bm{x},t)$ pode ser usado para redistribuir o termo fonte para a equação do balanço de massa, Eq. \ref{eq38}.
+
+\begin{equation} \label{eq38}
+    S_{m,r}(\bm{x},t)= g(\bm{x},t)S_M = g(\bm{x},t) \int_{\Omega}S_{m,o}(\bm{x},t)dV
+\end{equation}
+
+que é demonstrado satisfazer a conservação de massa, Eq. \ref{eq39}.
+
+\begin{equation} \label{eq39}
+    S_M = \int_{\Omega}S_{m,o}(\bm{x},t)dV = \equiv \int_{\Omega}S_{m,r}(\bm{x},t)dV = \int_{\Omega}S_M g(\bm{x},t)dV
+\end{equation}
+
+Da mesma forma, os termos fonte para as equações de quantidade de movimento linear e a equação de energia e as equações de transporte de espécies podem ser redistribuídos usando $g(\bm{x},t)$:
+
+\begin{equation} \label{eq40}
+    \bm{S}_{u,r}(\bm{x},t)= g(\bm{x},t) \int_{\Omega}\bm{S}_{u,o}(\bm{x},t)dV
+\end{equation}
+
+\begin{equation} \label{eq41}
+    S_{q,r}(\bm{x},t) = g(\bm{x},t) \int_{\Omega}S_{q,o}(\bm{x},t)dV   
+\end{equation}
+
+\begin{equation}
+    S_{Y_k,r}(\bm{x},t) = g(\bm{x},t)\int_{\Omega}S_{Y_k,o}(\bm{x},t)dV
+\end{equation}
+
+\section{Artigo Kurose \textit{et al.} 2022 \cite{Kurose2022}}
+
+O objetivo deste artigo foi propor uma estrutura numérica para modelar o acoplamento de atomização e combustão de chamas densas de spray, mantendo um custo computacional razoável. Os resultados são comparados com dados experimentais obtidos do queimador de agulhas de Sydney (\cite{THOMAS2019405},\cite{LOWE2019417}). O conceito é o seguinte. A atomização do combustível líquido é resolvida por uma simulação numérica detalhada, na qual as fases contínuas gasosa e líquida são estritamente resolvidas em uma estrutura euleriana, e os componentes euleriana das gotículas de líquido são transformados em gotículas lagrangianas em uma determinada seção transversal a jusante, ou seja, seção transversal de amostragem, cujas informações são armazenadas em um banco de dados. Em seguida, o processo de combustão é resolvido por uma simulação de grande turbilhão (LES) com um modelo de chama que adota o banco de dados pré-armazenado de gotículas lagrangianas, ou seja, por um acoplamento unidirecional entre uma simulação VOF e uma simulação de combustão.
+
+
+Neste trabalho, todos os cálculos foram realizados usando um solucionador LES não estruturado, ou seja, o FrontFlow/Red estendido pela Universidade de Kyoto (\cite{TACHIBANA20152621}, \cite{Moriai2013}, \cite{10.1115/1.4037099}).
+
+\subsection{Modelo Físico}
+
+\subsection{Modelo Matemático}
+
+Equações para a modelagem da região de pulverização densa.
+
+Na região de pulverização densa, onde ocorre o processo de atomização, as fases contínuas líquida e gasosa são tratadas como fluidos incompressíveis e ambas são resolvidas em uma estrutura Euleriana.
+
+Equação da continuidade:
+
+\begin{equation}
+    \rho \nabla \cdot \mathbf{u}=0.
+\end{equation}
+
