@@ -35,4 +35,3 @@ pdflatex principal.tex
 
 - LaTeX (TeX Live ou MiKTeX)
 - Pacotes LaTeX necessários (geralmente incluídos nas distribuições completas)
-
