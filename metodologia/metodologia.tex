@@ -371,37 +371,37 @@ Para trabalhos futuros pretende-se realizar as simulações realizadas por \cite
     \label{tab:comparativo_escalas}
     \begin{tabular}{l c c c c}
         \toprule
-        \textbf{Grandeza Característica} & \textbf{ (\textit{l})} & \textbf{Valor (\textit{l})} & \textbf{ (\textit{g})} & \textbf{Valor (\textit{g})} \\
+        \textbf{Grandeza Característica} & \textbf{(\textit{l})} & \textbf{Valor (\textit{l})} & \textbf{(\textit{g})} & \textbf{Valor (\textit{g})} \\
         \midrule
-        Comprimento (Kolmogorov) & $\eta_l \text{ (m)}$ & $1.32 \times 10^{-6}$ & $\eta_g \text{ (m)}$ & $4.20 \times 10^{-6}$ \\
-        Comprimento (Taylor) & $\lambda_l \text{ (m)}$ & $5.98 \times 10^{-4}$ & $\lambda_g \text{ (m)}$ & $5.24 \times 10^{-3}$ \\
+        Comprimento (Kolmogorov) & $\eta_l$ (m) & $1,32 \times 10^{-6}$ & $\eta_g$ (m) & $4,20 \times 10^{-6}$ \\
+        Comprimento (Taylor) & $\lambda_l$ (m) & $5,98 \times 10^{-4}$ & $\lambda_g$ (m) & $5,24 \times 10^{-3}$ \\
         \midrule
-        Tempo (Kolmogorov) & $\tau_l \text{ (s)}$ & $2.33 \times 10^{-4}$ & $\tau_g \text{ (s)}$ & $8.41 \times 10^{-5}$ \\
-        Tempo (Taylor) & $\tau_L \text{ (s)}$ & $2.33 \times 10^{-4}$ & $\tau_G \text{ (s)}$ & $1.09 \times 10^{-4}$ \\
+        Tempo (Kolmogorov) & $\tau_l$ (s) & $2,33 \times 10^{-4}$ & $\tau_g$ (s) & $8,41 \times 10^{-5}$ \\
+        Tempo (Taylor) & $\tau_L$ (s) & $2,33 \times 10^{-4}$ & $\tau_G$ (s) & $1,09 \times 10^{-4}$ \\
         \midrule
-        Velocidade (Kolmogorov) & $v_{r,l} \text{ (m/s)}$ & $3.20 \times 10^{-1}$ & $v_{r,g} \text{ (m/s)}$ & $3.59 \times 10^{+0}$ \\
+        Velocidade (Kolmogorov) & $v_{r,l}$ (m/s) & $3,20 \times 10^{-1}$ & $v_{r,g}$ (m/s) & $3,59 \times 10^{0}$ \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-
 \begin{table}[h!]
 \footnotesize
     \centering
-    \caption{\textbf{Análise de Malha }}
-    \begin{tabular}{l|c||c|c|c|c}
+    \caption{\textbf{Análise de Malha}}
+    \label{tab:analise_malha}
+    \begin{tabular}{l|c|c|c}
         \hline
-        \multicolumn{2}{c||}{\textbf{Domínio}} & \multicolumn{4}{c}{\textbf{Comprimento de Malha}} \\
+        \multicolumn{2}{c|}{\textbf{Domínio}} & \multicolumn{2}{c}{\textbf{Comprimento de Malha}} \\
         \hline
-        \textbf{Métrica} & \textbf{Base (m)} & \textbf{Base Taylor} $\times$ \textbf{0,5} & \textbf{Base Taylor} & \textbf{Base Taylor} $\times$ \textbf{2,5} & \textbf{Kolmogorov} \\
+        \textbf{Métrica} & \textbf{Base (m)} & \textbf{Base Taylor} & \textbf{Kolmogorov} \\
         \hline
-        \text{Tamanho da Célula} [min(L,g)] & - & $0,000299$ & $0,000598$ & $0,001495$ & $1,32 \times 10^{-6}$ \\
+        Tamanho da Célula [min(L,g)] & - & $5,98 \times 10^{-4}$ & $1,32 \times 10^{-6}$ \\
         \hline
-        \text{Células em } $x$ & $0,0125$ & $41,8$ & $20,9$ & $8,4$ & $9440,9$ \\
-        \text{Células em } $y$ & $0,0125$ & $41,8$ & $20,9$ & $8,4$ & $9440,9$ \\
-        \text{Células em } $z$ & $0,05$ & $167,3$ & $83,6$ & $33,5$ & $37763,5$ \\
+        Células em $x$ & $0,0125$ & $20,9$ & $9.440,9$ \\
+        Células em $y$ & $0,0125$ & $20,9$ & $9.440,9$ \\
+        Células em $z$ & $0,05$ & $83,6$ & $37.763,5$ \\
         \hline
-        \multicolumn{2}{l||}{\textbf{Total de Células}} & $2,92 \times 10^{5}$ & $36555,3$ & $2339,5$ & $3,37 \times 10^{12}$ \\
+        \multicolumn{2}{l|}{\textbf{Total de Células}} & $3,66 \times 10^{4}$ & $3,37 \times 10^{12}$ \\
         \hline
     \end{tabular}
 \end{table}
