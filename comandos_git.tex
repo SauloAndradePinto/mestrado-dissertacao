@@ -1,0 +1,174 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+\geometry{margin=2.5cm}
+
+% Configuração do código
+\lstset{
+    language=bash,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{gray!10},
+    frame=single,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=2,
+    showspaces=false,
+    showstringspaces=false
+}
+
+% Cabeçalho e rodapé
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{Guia de Comandos Git}}
+\fancyhead[R]{\today}
+\fancyfoot[C]{\thepage}
+
+% Títulos
+\titleformat{\section}{\Large\bfseries\color{blue!70!black}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{1em}{}
+
+\begin{document}
+
+\title{\textbf{Guia de Comandos Git}\\\large{Atualizar Repositório no GitHub}}
+\author{}
+\date{\today}
+\maketitle
+
+\section{Comandos Básicos para Atualizar o Repositório}
+
+\subsection{1. Verificar o Status Atual}
+\begin{lstlisting}
+cd ~/Mestrado/Dissertação_Saulo
+git status
+\end{lstlisting}
+Mostra quais arquivos foram modificados, adicionados ou removidos.
+
+\subsection{2. Adicionar Arquivos Modificados}
+\begin{lstlisting}
+# Adicionar todos os arquivos modificados
+git add .
+
+# Ou adicionar arquivos específicos
+git add principal.tex estilo.sty
+\end{lstlisting}
+
+\subsection{3. Fazer Commit das Alterações}
+\begin{lstlisting}
+git commit -m "Descrição das alterações feitas"
+\end{lstlisting}
+
+\textbf{Exemplos de mensagens de commit:}
+\begin{lstlisting}
+git commit -m "Atualização do capítulo de metodologia"
+git commit -m "Correção de referências bibliográficas"
+git commit -m "Adição de novas figuras na seção de resultados"
+\end{lstlisting}
+
+\subsection{4. Enviar para o GitHub}
+\begin{lstlisting}
+git push
+\end{lstlisting}
+
+\section{Fluxo Completo (Comando Único)}
+
+\begin{lstlisting}
+cd ~/Mestrado/Dissertação_Saulo
+git add .
+git commit -m "Sua mensagem descrevendo as alterações"
+git push
+\end{lstlisting}
+
+\section{Comandos Úteis Adicionais}
+
+\subsection{Ver Histórico de Commits}
+\begin{lstlisting}
+git log --oneline -10
+\end{lstlisting}
+
+\subsection{Ver Diferenças Antes de Commitar}
+\begin{lstlisting}
+git diff
+\end{lstlisting}
+
+\subsection{Desfazer Alterações em um Arquivo (antes de adicionar)}
+\begin{lstlisting}
+git checkout -- nome_do_arquivo.tex
+\end{lstlisting}
+
+\subsection{Verificar se Há Atualizações no GitHub}
+\begin{lstlisting}
+git fetch
+git status
+\end{lstlisting}
+
+\subsection{Atualizar Repositório Local com Mudanças do GitHub}
+\begin{lstlisting}
+git pull
+\end{lstlisting}
+
+\section{Exemplo Prático}
+
+Suponha que você editou \texttt{principal.tex} e \texttt{estilo.sty}:
+
+\begin{lstlisting}
+cd ~/Mestrado/Dissertação_Saulo
+
+# Ver o que mudou
+git status
+
+# Adicionar os arquivos
+git add principal.tex estilo.sty
+
+# Fazer commit
+git commit -m "Atualização do documento principal e estilo"
+
+# Enviar para o GitHub
+git push
+\end{lstlisting}
+
+\section{Informações do Repositório}
+
+\begin{itemize}
+    \item \textbf{URL do Repositório:} \url{https://github.com/SauloAndradePinto/mestrado-dissertacao}
+    \item \textbf{Branch Principal:} main
+    \item \textbf{Token de Acesso:} Já configurado (não é necessário inserir novamente)
+\end{itemize}
+
+\section{Observações Importantes}
+
+\begin{enumerate}
+    \item Sempre use \texttt{git status} antes de fazer commit para verificar o que será enviado
+    \item Escreva mensagens de commit descritivas e claras
+    \item O token de acesso já está configurado, então \texttt{git push} funcionará automaticamente
+    \item Se houver conflitos, o Git avisará e você precisará resolvê-los antes de fazer push
+\end{enumerate}
+
+\section{Dica: Criar Alias para Facilitar}
+
+Você pode adicionar ao arquivo \texttt{\textasciitilde/.bashrc} ou \texttt{\textasciitilde/.zshrc}:
+
+\begin{lstlisting}
+alias git-update='git add . && git commit -m "Update" && git push'
+\end{lstlisting}
+
+Depois, recarregue o terminal e use apenas:
+\begin{lstlisting}
+git-update
+\end{lstlisting}
+
+\end{document}
+
